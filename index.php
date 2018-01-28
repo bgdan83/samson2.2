@@ -98,4 +98,3 @@ and open the template in the editor.
         </table>
     </body>
 </html>
-
