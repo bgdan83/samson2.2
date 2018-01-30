@@ -44,10 +44,13 @@ and open the template in the editor.
         $f1 = new TrapezeF1Class($arrTrapeze);
         $arrTrapeze1 = $f1->calculate($arrTrapeze);
         $arrTrapeze1 = $f1->oddNumber($arrTrapeze1);
-        $echot = new EchoTableClass();
+        
+        
         $f2 = new TrapezeF2Class($arrTrapeze);
         $arrTrapeze2 = $f2->calculate($arrTrapeze);
         $arrTrapeze2 = $f2->oddNumber($arrTrapeze2);
+        
+        $echot = new EchoTableClass();
         $echot->getValue($arrTrapeze1);
         $echot->getValue($arrTrapeze2);
         ?>

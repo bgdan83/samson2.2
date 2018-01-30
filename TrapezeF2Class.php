@@ -11,7 +11,7 @@
  *
  * @author Андрей
  */
-class TrapezeF2Class
+class TrapezeF2Class extends FuncClass
 {
     public $simpleNumberArray;
 
@@ -20,26 +20,27 @@ class TrapezeF2Class
         $this->simpleNumberArray = $simpleNumberArray;
     }
 //((a+b)^c*(a/c)^min(a,b,c))
-    private function calcFormula($a, $b, $c)
+     function calcFormula($a, $b, $c)
     {
         $ar = array($a, $b, $c);
         $result = 0;
         $temp = 0;
         $result = $a / $c;
-        $result = $result * $c;
-        $temp = $a + $b;
-        $result = $temp ^ $result;
         $temp = parent::minimum($ar);
-        $result = $result ^ $temp;
+        $result = parent::degree($result, $temp);
+        $temp = $a + $b;
+        $temp = parent::degree($temp, $c);
+        $result = $result * $temp;
         return $result;
     }
     
-    public function calculation($ar)
+    public function calculate($ar)
     {
         for ($i = 0; $i < count($ar); $i++) {
 
-            $ar[$i]["f"] = calcFormula($ar[$i]["a"], $ar[$i]["b"], $ar[$i]["c"]);
+            $ar[$i]["f"] = $this->calcFormula($ar[$i]["a"], $ar[$i]["b"], $ar[$i]["c"]);
         }
+        return $ar;
     }
 
 }

@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+include 'FuncClass.php';
 /**
  * Description of simpleNumberClass
  *
@@ -27,22 +27,24 @@ class TrapezeF1Class extends FuncClass
         $result = 0;
         $temp = 0;
         $result = $a / $c;
-        $result = $result ^ $b;
+        $result = parent::degree($result, $b);
         $result %= 3;
-        $temp = $a * $b;
-        $result += $c;
-        $result = $temp ^ $result;
-        $temp = minimum($ar);
-        $result = $result ^ $temp;
+        $temp = parent::minimum($ar);
+        $result = parent::degree($result, $temp);
+        $temp = parent::degree($b, $c);
+        $temp *= $a;
+        $result += $temp;
         return $result;
     }
-    
-    public function calculation($ar)
-    {
-        for ($i = 0; $i < count($ar); $i++) {
 
-            $ar[$i]["f"] = calcFormula($ar[$i]["a"], $ar[$i]["b"], $ar[$i]["c"]);
+    public function calculate($ar)
+    {
+        foreach ($ar as $k => &$v) {
+
+            $v["f"] = $this->calcFormula($v["a"], $v["b"], $v["c"]);
         }
+        return $ar;
     }
+    
 
 }

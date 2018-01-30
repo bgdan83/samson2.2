@@ -17,22 +17,34 @@ class FuncClass
     public function minimum($ar)
     {
 
-        $result = $ar[0];
-
-        for ($i = 1; $i < count($ar); $i++) {
-            if ($result > $ar[$i])
-                $result = $ar[$i];
+        $result = 0;
+        foreach ($ar as $a) {
+            if ($result > $a)
+                $result = $a;
         }
 
         return $result;
     }
 
-    public function calculation($ar)
+    public function oddNumber($ar)
     {
-        for ($i = 0; $i < count($ar); $i++) {
-
-            $ar[$i]["f"] = calcformula1($ar[$i]["a"], $ar[$i]["b"], $ar[$i]["c"]);
+        foreach ($ar as $k => &$val) {
+            if (($val["s"] % 2) != 0) {
+                $val["d"] = &$val["s"];
+            } else {
+                $val["d"] = 0;
+            }
         }
+        return $ar;
+    }
+
+    function degree($number, $pow)
+    {
+        $result = 1;
+        for ($i = 0; $i < $pow; $i++) {
+            $result *= $number;
+        }
+        return $result;
     }
 
 }
