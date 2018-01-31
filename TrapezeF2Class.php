@@ -36,9 +36,9 @@ class TrapezeF2Class extends FuncClass
     
     public function calculate($ar)
     {
-        for ($i = 0; $i < count($ar); $i++) {
+        foreach ($ar as $k => &$v) {
 
-            $ar[$i]["f"] = $this->calcFormula($ar[$i]["a"], $ar[$i]["b"], $ar[$i]["c"]);
+            $v["f"] = $this->calcFormula($v["a"], $v["b"], $v["c"]);
         }
         return $ar;
     }
