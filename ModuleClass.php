@@ -16,7 +16,7 @@ class ModuleClass
 
     function __construct()
     {
-        
+
         $this->mysqli = new mysqli(HOST, USER, PASS, DB);
     }
 
@@ -40,9 +40,9 @@ class ModuleClass
     function get_product_all($ids)
     {
         if ($ids) {
-            $query = "SELECT * FROM product WHERE parent_id IN($ids)  ORDER BY price_basic";
+            $query = "SELECT product.product_name, price.value FROM product, price WHERE product.id = price.product_id AND product.parent_id IN($ids) AND price.type = 'базовая'";
         } else {
-            $query = "SELECT * FROM product ORDER BY price_basic ";
+            $query = "SELECT product.product_name, price.value FROM product, price WHERE product.id = price.product_id  AND price.type = 'базовая'";
         }
         $res = $this->mysqli->query($query);
         $products = array();
@@ -57,7 +57,7 @@ class ModuleClass
     {
         if (is_array($arr)) {
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_basic'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
             }
         }
     }
@@ -87,6 +87,22 @@ class ModuleClass
             $arr_cat[$row['id']] = $row;
         }
         return $arr_cat;
+    }
+
+    function getCatId()
+    {
+        $query = "SELECT id, category_name FROM category";
+        $res = $this->mysqli->query($query);
+
+        $arr_cat = array();
+
+        $row_cnt = $res->num_rows;
+        //В цикле формируем массив
+        for ($i = 0; $i < $row_cnt; $i++) {
+            $row = $res->fetch_array(MYSQLI_ASSOC);
+            $arr[] = $row;
+        }
+        return $arr;
     }
 
     function get_cat()
@@ -138,25 +154,18 @@ class ModuleClass
 
     public function filtr_name()
     {
-        if (isset($_GET['product_name'])) {
+        if (!empty($_GET['product_name'])) {
             $name = strip_tags(htmlspecialchars($_GET['product_name']));
-
-            $t = array();
             $name = $this->mysqli->real_escape_string($name);
-            //$name = substr($name, 0, 6);
-            $t[] = "(product_name LIKE '%$name%')";
-            if ($t) {
-                $d = "WHERE";
-                $t = implode(" AND ", $t);
-            } else {
-                $d = "";
-            }
-
-            $sql = "SELECT * FROM product $d $t";
+            $sql = "SELECT product.product_name, price.value FROM product, price "
+                    . "WHERE "
+                    . " product.id = price.product_id  "
+                    . " AND price.type = 'базовая'"
+                    . " AND product_name LIKE '%$name%'";
             $result = $this->mysqli->query($sql);
 
-            if (!$result) {
-                echo 'Поиск';
+            if ($result->num_rows == 0) {
+                echo 'Товар не найден';
             }
             $arr = array();
             $row_cnt = $result->num_rows;
@@ -166,7 +175,7 @@ class ModuleClass
                 $arr[] = $row;
             }
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_basic'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
             }
         }
     }
@@ -178,7 +187,11 @@ class ModuleClass
             $max_price = (int) strip_tags(htmlspecialchars($_GET['max_price']));
             $min_price = $this->mysqli->real_escape_string($min_price);
             $max_price = $this->mysqli->real_escape_string($max_price);
-            $sql = "SELECT * FROM product WHERE price_basic >= " . $min_price . " AND price_basic <= " . $max_price;
+            $sql = "SELECT product.product_name, price.value FROM product, price"
+                    . " WHERE product.id = price.product_id "
+                    . "AND price.type = 'базовая'"
+                    . "AND value >= " . $min_price . " "
+                    . "AND value <= " . $max_price;
             $result = $this->mysqli->query($sql);
             $arr = array();
             $row_cnt = $result->num_rows;
@@ -188,7 +201,7 @@ class ModuleClass
                 $arr[] = $row;
             }
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_basic'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
             }
         }
     }
@@ -196,86 +209,85 @@ class ModuleClass
     function importXmlToBd()
     {
         if (isset($_POST['buttonImport'])) {
-            $products = simplexml_load_file('2.2.xml');
-            //var_dump($products);
+            $products = simplexml_load_file('2.2.xml') or die("Error: Cannot create object");
+
             foreach ($products as $Товар) {
                 $code = $Товар['Код'];
                 $product_name = $Товар['Название'];
-                $price_basic = $Товар->Цена[0];
-                $price_moscow = $Товар->Цена[1];
-                $density = $Товар->Свойства->Плотность;
-                $white = $Товар->Свойства->Белизна;
-                $format = $Товар->Свойства->Формат['0'];
-                //echo $Товар->Свойства->Формат['1'];
-                $type = $Товар->Свойства->Тип;
-                $parent_id = $Товар->Разделы->Раздел['0'];
-                //echo $Товар->Разделы->Раздел['1'];
-                switch ($density) {
-                    case 90 : $density = 1;
-                        break;
-                    case 100 : $density = 2;
-                        break;
-                    case 120 : $density = 3;
-                        break;
-                    default : $density = 0;
-                }
+                $price = $Товар->Цена;
+                $properties = $Товар->Свойства;
+                        
+                $categories = $Товар->Разделы->Раздел;
+                $temp = 0;
+                $arr = ModuleClass::getCatId();
+                $arr = array_column($arr, 'category_name', 'id');
+                //print_r($arr);
+               
 
-                $format = substr($format, 1);
-                switch ($format) {
-                    case '3' : $format = 1;
-                        break;
-                    case '4' : $format = 2;
-                        break;
-                    case '5' : $format = 3;
-                        break;
-                    default : $format = 0;
-                        break;
-                }
 
-                switch ($type) {
-                    case 'Лазерный' : $type = 1;
-                        break;
-                    case 'Струйный' : $type = 2;
-                        break;
-                    default : $type = 0;
-                        break;
-                }
-
-                switch ($parent_id) {
-                    case 'Бумага' : $parent_id = 30;
-                        break;
-                    case 'Принтеры' : $parent_id = 34;
-                        break;
-                    default : $parent_id = 0;
-                        break;
-                }
-                print_r($type);
                 $query = "INSERT INTO product (
                         code, 
-                        product_name, 
-                        price_basic, 
-                        price_moscow, 
-                        density, 
-                        white, 
-                        format, 
-                        type, 
-                        parent_id)
+                        product_name)
                         VALUES( 
                         '" . $code . "', 
-                         '" . $product_name . "', 
-                         '" . $price_basic . "', 
-                         '" . $price_moscow . "', 
-                         '" . $density . "', 
-                         '" . $white . "', 
-                         '" . $format . "', 
-                         '" . $type . "', 
-                        '" . $parent_id . "')";
+                         '" . $product_name . "' 
+                        )";
                 $sql = $this->mysqli->query($query);
                 if ($sql) {
-                    echo "<p>Данные успешно добавлены в таблицу.</p>";
-                } else {
-                    echo "<p>Произошла ошибка.</p>";
+                            echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
+                        } else {
+                            echo "<p>Произошла ошибка.</p>";
+                        }
+                $id = $this->mysqli->insert_id;
+
+                foreach ($properties as $property) {
+                    foreach ($property as $k => $v) {
+                        $query = "INSERT INTO properties SET
+                        product_id = '" . $id . "',
+                        properties_name = '" . $k . "' , 
+                        
+                        value = '" . $v . "'";
+
+                        $sql = $this->mysqli->query($query);
+                        if ($sql) {
+                            echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
+                        } else {
+                            echo "<p>Произошла ошибка.</p>";
+                        }
+                    }
                 }
+
+                for ($i = 0, $j = count($price); $i < $j; $i++) {
+
+                    $query = "INSERT INTO price SET
+                        product_id = '" . $id . "',
+                        type = '" . $price[$i]->attributes() . "' , 
+                        
+                        value = '" . $price[$i] . "'";
+
+                    $sql = $this->mysqli->query($query);
+                    if ($sql) {
+                        echo "<p>Данные цен успешно добавлены в таблицу.</p>";
+                    } else {
+                        echo "<p>Произошла ошибка.</p>";
+                    }
+                }
+
+                foreach ($categories as $category) {
+                        
+                     $temp =  array_search($category, $arr) ; 
+                    $query = "INSERT INTO product_to_category SET
+                        product_id = '" . $id . "',
+                        category_id = '" . $temp . "'";
+
+                    $sql = $this->mysqli->query($query);
+                    if ($sql) {
+                        echo "<p>Данные категорий успешно добавлены в таблицу.</p>";
+                    } else {
+                        echo "<p>Произошла ошибка.</p>";
+                    }
+                }
+ 
             }
         }
     }
@@ -341,7 +353,7 @@ class ModuleClass
                     }
                     $xmlout .= "\t\t\t<Тип>" . $row['type'] . "</Тип>\n";
                 }
-                
+
                 $xmlout .= "\t\t</Свойства>\n";
                 $xmlout .= "\t\t<Разделы>\n";
 
@@ -364,6 +376,7 @@ class ModuleClass
             file_put_contents("1.xml", $xmlout);
         }
     }
+
 }
 ?>
 
