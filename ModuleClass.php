@@ -36,7 +36,7 @@ class ModuleClass
         }
     }
 
-    //принимает айдишники выводимых товаров в выбранной рубрике 
+    //принимает ID выводимых товаров в выбранной рубрике 
     function get_product_all($ids)
     {
         if ($ids) {
@@ -215,16 +215,13 @@ class ModuleClass
                 $code = $Товар['Код'];
                 $product_name = $Товар['Название'];
                 $price = $Товар->Цена;
-                $properties = $Товар->Свойства;
-                        
+                $properties = $Товар->Свойства;       
                 $categories = $Товар->Разделы->Раздел;
                 $temp = 0;
                 $arr = ModuleClass::getCatId();
                 $arr = array_column($arr, 'category_name', 'id');
                 //print_r($arr);
                
-
-
                 $query = "INSERT INTO product (
                         code, 
                         product_name)
@@ -245,9 +242,7 @@ class ModuleClass
                         $query = "INSERT INTO properties SET
                         product_id = '" . $id . "',
                         properties_name = '" . $k . "' , 
-                        
                         value = '" . $v . "'";
-
                         $sql = $this->mysqli->query($query);
                         if ($sql) {
                             echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
@@ -258,13 +253,10 @@ class ModuleClass
                 }
 
                 for ($i = 0, $j = count($price); $i < $j; $i++) {
-
                     $query = "INSERT INTO price SET
                         product_id = '" . $id . "',
                         type = '" . $price[$i]->attributes() . "' , 
-                        
                         value = '" . $price[$i] . "'";
-
                     $sql = $this->mysqli->query($query);
                     if ($sql) {
                         echo "<p>Данные цен успешно добавлены в таблицу.</p>";
@@ -273,13 +265,11 @@ class ModuleClass
                     }
                 }
 
-                foreach ($categories as $category) {
-                        
+                foreach ($categories as $category) {  
                      $temp =  array_search($category, $arr) ; 
                     $query = "INSERT INTO product_to_category SET
                         product_id = '" . $id . "',
                         category_id = '" . $temp . "'";
-
                     $sql = $this->mysqli->query($query);
                     if ($sql) {
                         echo "<p>Данные категорий успешно добавлены в таблицу.</p>";
