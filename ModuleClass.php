@@ -40,9 +40,13 @@ class ModuleClass
     function get_product_all($ids)
     {
         if ($ids) {
-            $query = "SELECT product.product_name, price.value FROM product, price WHERE product.id = price.product_id AND product.parent_id IN($ids) AND price.type = 'базовая'";
+            $query = "SELECT product.product_name, price.price_value "
+                   . "FROM product "
+                   . "INNER JOIN price ON product.id = price.product_id "
+                   . "AND product.parent_id IN($ids) "
+                   . "AND price.type = 'базовая'";
         } else {
-            $query = "SELECT product.product_name, price.value FROM product, price WHERE product.id = price.product_id  AND price.type = 'базовая'";
+            $query = "SELECT product.product_name, price.price_value FROM product, price WHERE product.id = price.product_id  AND price.type = 'базовая'";
         }
         $res = $this->mysqli->query($query);
         $products = array();
@@ -57,7 +61,7 @@ class ModuleClass
     {
         if (is_array($arr)) {
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_value'] . '<br>';
             }
         }
     }
@@ -157,10 +161,10 @@ class ModuleClass
         if (!empty($_GET['product_name'])) {
             $name = strip_tags(htmlspecialchars($_GET['product_name']));
             $name = $this->mysqli->real_escape_string($name);
-            $sql = "SELECT product.product_name, price.value FROM product, price "
-                    . "WHERE "
-                    . " product.id = price.product_id  "
-                    . " AND price.type = 'базовая'"
+            $sql = "SELECT product.product_name, price.price_value FROM product "
+                    . "INNER JOIN price "
+                    . "ON product.id = price.product_id  "
+                    . "AND price.type = 'базовая'"
                     . " AND product_name LIKE '%$name%'";
             $result = $this->mysqli->query($sql);
 
@@ -175,7 +179,7 @@ class ModuleClass
                 $arr[] = $row;
             }
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_value'] . '<br>';
             }
         }
     }
@@ -187,11 +191,12 @@ class ModuleClass
             $max_price = (int) strip_tags(htmlspecialchars($_GET['max_price']));
             $min_price = $this->mysqli->real_escape_string($min_price);
             $max_price = $this->mysqli->real_escape_string($max_price);
-            $sql = "SELECT product.product_name, price.value FROM product, price"
-                    . " WHERE product.id = price.product_id "
+            $sql = "SELECT product.product_name, price.price_value FROM product "
+                    . "INNER JOIN price "
+                    . "ON product.id = price.product_id "
                     . "AND price.type = 'базовая'"
-                    . "AND value >= " . $min_price . " "
-                    . "AND value <= " . $max_price;
+                    . "AND price_value >= " . $min_price . " "
+                    . "AND price_value <= " . $max_price;
             $result = $this->mysqli->query($sql);
             $arr = array();
             $row_cnt = $result->num_rows;
@@ -201,7 +206,7 @@ class ModuleClass
                 $arr[] = $row;
             }
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['value'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_value'] . '<br>';
             }
         }
     }
@@ -215,13 +220,13 @@ class ModuleClass
                 $code = $Товар['Код'];
                 $product_name = $Товар['Название'];
                 $price = $Товар->Цена;
-                $properties = $Товар->Свойства;       
+                $properties = $Товар->Свойства;
                 $categories = $Товар->Разделы->Раздел;
                 $temp = 0;
                 $arr = ModuleClass::getCatId();
                 $arr = array_column($arr, 'category_name', 'id');
                 //print_r($arr);
-               
+
                 $query = "INSERT INTO product (
                         code, 
                         product_name)
@@ -231,10 +236,10 @@ class ModuleClass
                         )";
                 $sql = $this->mysqli->query($query);
                 if ($sql) {
-                            echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
-                        } else {
-                            echo "<p>Произошла ошибка.</p>";
-                        }
+                    echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
+                } else {
+                    echo "<p>Произошла ошибка.</p>";
+                }
                 $id = $this->mysqli->insert_id;
 
                 foreach ($properties as $property) {
@@ -242,7 +247,7 @@ class ModuleClass
                         $query = "INSERT INTO properties SET
                         product_id = '" . $id . "',
                         properties_name = '" . $k . "' , 
-                        value = '" . $v . "'";
+                        properties_value = '" . $v . "'";
                         $sql = $this->mysqli->query($query);
                         if ($sql) {
                             echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
@@ -256,7 +261,7 @@ class ModuleClass
                     $query = "INSERT INTO price SET
                         product_id = '" . $id . "',
                         type = '" . $price[$i]->attributes() . "' , 
-                        value = '" . $price[$i] . "'";
+                        price_value = '" . $price[$i] . "'";
                     $sql = $this->mysqli->query($query);
                     if ($sql) {
                         echo "<p>Данные цен успешно добавлены в таблицу.</p>";
@@ -265,8 +270,8 @@ class ModuleClass
                     }
                 }
 
-                foreach ($categories as $category) {  
-                     $temp =  array_search($category, $arr) ; 
+                foreach ($categories as $category) {
+                    $temp = array_search($category, $arr);
                     $query = "INSERT INTO product_to_category SET
                         product_id = '" . $id . "',
                         category_id = '" . $temp . "'";
@@ -277,7 +282,6 @@ class ModuleClass
                         echo "<p>Произошла ошибка.</p>";
                     }
                 }
- 
             }
         }
     }
@@ -286,84 +290,136 @@ class ModuleClass
     {
         //header('Content-type: text/xml');
         if (isset($_POST['buttonExport'])) {
-            $xmlout = "<?xml version=\"1.0\" encoding=\"windows-1251\"?>\n";
-            $xmlout .= "<Товары>\n";
+
 
             $db = new PDO('mysql:host=localhost;dbname=test_rubric', 'root', '');
-            $stmt = $db->prepare("Select * FROM product");
+            $stmt = $db->prepare("SELECT id, product_name, code FROM product");
             $stmt->execute();
+
+            $xml = new DOMDocument("1.0", "windows-1251");
+
+            $products = $xml->appendChild($xml->createElement("Товары"));
 
             while ($row = $stmt->fetch()) {
 
-                $xmlout .= "\t<Товар Код=\"" . $row['code'] . "\" Название=\"" . $row['product_name'] . "\">\n";
+                $product = $xml->createElement("Товар");
+                $products->appendChild($product);
+                $product->setAttribute("Код", $row['code']);
+                $product->setAttribute("Название", $row['product_name']);
 
-                $xmlout .= "\t\t<Цена Тип=\"Базовая\">" . $row['price_basic'] . "</Цена>\n";
-
-                $xmlout .= "\t\t<Цена Тип=\"Москва\">" . $row['price_moscow'] . "</Цена>\n";
-
-                $xmlout .= "\t\t<Свойства>\n";
-
-                if ($row['density'] != 0) {
-                    switch ($row['density']) {
-                        case 1 : $row['density'] = 90;
-                            break;
-                        case 2 : $row['density'] = 100;
-                            break;
-                        case 3 : $row['density'] = 120;
-                            break;
-                    }
-
-                    $xmlout .= "\t\t\t<Плотность>" . $row['density'] . "</Плотность>\n";
+                $stmt1 = $db->prepare("SELECT price_value, type "
+                                    . "FROM price "
+                                    . "WHERE product_id = '" . $row['id'] . "'");
+                $stmt1->execute();
+                while ($row1 = $stmt1->fetch()) {
+                    $price = $xml->createElement("Цена", $row1['price_value']);
+                    $product->appendChild($price);
+                    $price->setAttribute("Тип", $row1['type']);
                 }
 
-                if ($row['white'] != 0) {
-                    $xmlout .= "\t\t\t<Белизна ЕдИзм=\"%\">" . $row['white'] . "</Белизна>\n";
+                $properties = $xml->createElement("Свойства");
+                $product->appendChild($properties);
+
+                $stmt2 = $db->prepare("SELECT properties_name, properties_value "
+                                    . "FROM properties "
+                                    . "WHERE product_id = '" . $row['id'] . "'");
+                $stmt2->execute();
+                while ($row2 = $stmt2->fetch()) {
+                    $properties1 = $xml->createElement($row2['properties_name'], $row2['properties_value']);
+                    $properties->appendChild($properties1);
                 }
 
-                if ($row['format'] != 0) {
-                    switch ($row['format']) {
-                        case 1 : $row['format'] = 'А3';
-                            break;
-                        case 2 : $row['format'] = 'А4';
-                            break;
-                        case 3 : $row['format'] = 'А5';
-                            break;
-                    }
-                    $xmlout .= "\t\t\t<Формат>" . $row['format'] . "</Формат>\n";
+                $categories = $xml->createElement("Разделы");
+                $product->appendChild($categories);
+                $stmt3 = $db->prepare("SELECT c.category_name 
+                                        FROM category c 
+                                        INNER JOIN product_to_category ptg ON ptg.category_id = c.id
+                                        WHERE ptg.product_id = '" . $row['id'] . "'");
+                $stmt3->execute();
+                while ($row3 = $stmt3->fetch()) {
+                    $category = $xml->createElement("Раздел", $row3['category_name']);
+                    $categories->appendChild($category);
                 }
-
-                if ($row['type'] != 0) {
-                    switch ($row['type']) {
-                        case 1 : $row['type'] = 'Лазерный';
-                            break;
-                        case 2 : $row['type'] = 'Струйный';
-                            break;
-                        case 3 : $row['type'] = 'Матричный';
-                            break;
-                    }
-                    $xmlout .= "\t\t\t<Тип>" . $row['type'] . "</Тип>\n";
-                }
-
-                $xmlout .= "\t\t</Свойства>\n";
-                $xmlout .= "\t\t<Разделы>\n";
-
-                if ($row['parent_id'] == 30) {
-                    $xmlout .= "\t\t\t<Раздел>Бумага</Раздел>\n";
-                }
-                if ($row['parent_id'] == 31) {
-                    $xmlout .= "\t\t\t<Раздел>Категория1 3 уровень</Раздел>\n";
-                }
-                if ($row['parent_id'] == 32) {
-                    $xmlout .= "\t\t\t<Раздел>Категория1 4 уровень</Раздел>\n";
-                }
-                if ($row['parent_id'] == 34) {
-                    $xmlout .= "\t\t\t<Раздел>Принтеры</Раздел>\n";
-                }
-                $xmlout .= "\t\t</Разделы>\n";
-                $xmlout .= "\t</Товар>\n";
             }
-            $xmlout .= "</Товары>";
-            file_put_contents("1.xml", $xmlout);
+
+            
+            $xml->formatOutput = true;
+            print $xml->save("1.xml");
+            /*           //$xmlout = "<?xml version=\"1.0\" encoding=\"windows-1251\"?>\n";
+              //$xmlout .= "<Товары>\n";
+              while ($row = $stmt->fetch()) {
+
+              $xmlout .= "\t<Товар Код=\"" . $row['code'] . "\" Название=\"" . $row['product_name'] . "\">\n";
+
+              $xmlout .= "\t\t<Цена Тип=\"Базовая\">" . $row['price_basic'] . "</Цена>\n";
+
+              $xmlout .= "\t\t<Цена Тип=\"Москва\">" . $row['price_moscow'] . "</Цена>\n";
+
+              $xmlout .= "\t\t<Свойства>\n";
+
+              if ($row['density'] != 0) {
+              switch ($row['density']) {
+              case 1 : $row['density'] = 90;
+              break;
+              case 2 : $row['density'] = 100;
+              break;
+              case 3 : $row['density'] = 120;
+              break;
+              }
+
+              $xmlout .= "\t\t\t<Плотность>" . $row['density'] . "</Плотность>\n";
+              }
+
+              if ($row['white'] != 0) {
+              $xmlout .= "\t\t\t<Белизна ЕдИзм=\"%\">" . $row['white'] . "</Белизна>\n";
+              }
+
+              if ($row['format'] != 0) {
+              switch ($row['format']) {
+              case 1 : $row['format'] = 'А3';
+              break;
+              case 2 : $row['format'] = 'А4';
+              break;
+              case 3 : $row['format'] = 'А5';
+              break;
+              }
+              $xmlout .= "\t\t\t<Формат>" . $row['format'] . "</Формат>\n";
+              }
+
+              if ($row['type'] != 0) {
+              switch ($row['type']) {
+              case 1 : $row['type'] = 'Лазерный';
+              break;
+              case 2 : $row['type'] = 'Струйный';
+              break;
+              case 3 : $row['type'] = 'Матричный';
+              break;
+              }
+              $xmlout .= "\t\t\t<Тип>" . $row['type'] . "</Тип>\n";
+              }
+
+              $xmlout .= "\t\t</Свойства>\n";
+              $xmlout .= "\t\t<Разделы>\n";
+
+              if ($row['parent_id'] == 30) {
+              $xmlout .= "\t\t\t<Раздел>Бумага</Раздел>\n";
+              }
+              if ($row['parent_id'] == 31) {
+              $xmlout .= "\t\t\t<Раздел>Категория1 3 уровень</Раздел>\n";
+              }
+              if ($row['parent_id'] == 32) {
+              $xmlout .= "\t\t\t<Раздел>Категория1 4 уровень</Раздел>\n";
+              }
+              if ($row['parent_id'] == 34) {
+              $xmlout .= "\t\t\t<Раздел>Принтеры</Раздел>\n";
+              }
+              $xmlout .= "\t\t</Разделы>\n";
+              $xmlout .= "\t</Товар>\n";
+              }
+              $xmlout .= "</Товары>";
+              file_put_contents("1.xml", $xmlout);
+             * 
+             */
         }
     }
 
