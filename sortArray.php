@@ -6,29 +6,30 @@
  * and open the template in the editor.
  */
 
- $array = array(
-        array(
-            'a' => 3,
-            
-        ),
-        array(
-            'a' => 2,
-            'b' => 8,
-            
-        ),
-        array(
-            'a' => 1,
-            'b' => 8,
-            ),
-     );
+$array = array(
+    array(
+        'a' => 3,
+    ),
+    array(
+        'a' => 2,
+        'b' => 8,
+    ),
+    array(
+        'a' => 1,
+        'b' => 8,
+    ),
+);
+try {
 
-function mysort($a, $b) {
-    return  $a['a'] - $b['a'];
+    function mysort($a, $b)
+    {
+        return $a['a'] / 0;
+    }
+
+    usort($array, 'mysort');
+} catch (Exception $e) {
+    echo 'Поймано исключение: ', $e->getMessage(), "\n";
 }
-
-usort($array, 'mysort');
-
 echo '<pre>';
 print_r($array);
-
 
