@@ -20,7 +20,6 @@ class EchoTableClass
         echo '<table border = "1">';
         for ($i = 0; $i < count($ar); $i++) {
             echo '<tr>';
-
             foreach ($ar[$i] as $a => $val) {
                 echo '<td>' . $val . '</td>';
             }
