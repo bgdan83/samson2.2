@@ -35,7 +35,7 @@ class ModuleClass
             }
         }
     }
-
+    
     //принимает ID выводимых товаров в выбранной рубрике 
     function get_product_all($ids)
     {
@@ -43,10 +43,14 @@ class ModuleClass
             $query = "SELECT product.product_name, price.price_value "
                    . "FROM product "
                    . "INNER JOIN price ON product.id = price.product_id "
-                   . "AND product.parent_id IN($ids) "
+                   . "INNER JOIN product_to_category ptc ON product.id = ptc.product_id "
+                   . "AND ptc.category_id IN($ids) "
+                   // "AND product.parent_id IN($ids) "
                    . "AND price.type = 'базовая'";
         } else {
-            $query = "SELECT product.product_name, price.price_value FROM product, price WHERE product.id = price.product_id  AND price.type = 'базовая'";
+            $query = "SELECT product.product_name, price.price_value FROM product  "
+                    . "INNER JOIN price ON product.id = price.product_id  "
+                    . "AND price.type = 'базовая'";
         }
         $res = $this->mysqli->query($query);
         $products = array();
@@ -61,7 +65,8 @@ class ModuleClass
     {
         if (is_array($arr)) {
             for ($i = 0; $i < count($arr); $i++) {
-                echo $arr[$i]['product_name'] . '. цена: ' . $arr[$i]['price_value'] . '<br>';
+                echo $arr[$i]['product_name'] . '. цена: ' . 
+                     $arr[$i]['price_value'] . '<br>';
             }
         }
     }
@@ -77,13 +82,14 @@ class ModuleClass
                 $data .= ModuleClass::cats_id($array, $item['id']);
             }
         }
+       
         return $data;
     }
 
     //Функция получения массива каталога
     function get_cats()
     {
-        $query = "SELECT * FROM category";
+        $query = "SELECT id, parent_id FROM category";
         $res = $this->mysqli->query($query);
 
         $arr_cat = array();
@@ -129,6 +135,7 @@ class ModuleClass
                 }
                 $arr_cat[$row['parent_id']][] = $row;
             }
+            
             return $arr_cat;
         }
     }
@@ -144,6 +151,7 @@ class ModuleClass
         echo '<ul>';
         //перебираем в цикле массив и выводим на экран
         for ($i = 0; $i < count($arr[$parent_id]); $i++) {
+        
             echo '<li>' .
             '<a href="?category_id=' . $arr[$parent_id][$i]['id'] .
             '&parent_id=' . $parent_id . '">'
@@ -345,81 +353,7 @@ class ModuleClass
             
             $xml->formatOutput = true;
             print $xml->save("1.xml");
-            /*           //$xmlout = "<?xml version=\"1.0\" encoding=\"windows-1251\"?>\n";
-              //$xmlout .= "<Товары>\n";
-              while ($row = $stmt->fetch()) {
-
-              $xmlout .= "\t<Товар Код=\"" . $row['code'] . "\" Название=\"" . $row['product_name'] . "\">\n";
-
-              $xmlout .= "\t\t<Цена Тип=\"Базовая\">" . $row['price_basic'] . "</Цена>\n";
-
-              $xmlout .= "\t\t<Цена Тип=\"Москва\">" . $row['price_moscow'] . "</Цена>\n";
-
-              $xmlout .= "\t\t<Свойства>\n";
-
-              if ($row['density'] != 0) {
-              switch ($row['density']) {
-              case 1 : $row['density'] = 90;
-              break;
-              case 2 : $row['density'] = 100;
-              break;
-              case 3 : $row['density'] = 120;
-              break;
-              }
-
-              $xmlout .= "\t\t\t<Плотность>" . $row['density'] . "</Плотность>\n";
-              }
-
-              if ($row['white'] != 0) {
-              $xmlout .= "\t\t\t<Белизна ЕдИзм=\"%\">" . $row['white'] . "</Белизна>\n";
-              }
-
-              if ($row['format'] != 0) {
-              switch ($row['format']) {
-              case 1 : $row['format'] = 'А3';
-              break;
-              case 2 : $row['format'] = 'А4';
-              break;
-              case 3 : $row['format'] = 'А5';
-              break;
-              }
-              $xmlout .= "\t\t\t<Формат>" . $row['format'] . "</Формат>\n";
-              }
-
-              if ($row['type'] != 0) {
-              switch ($row['type']) {
-              case 1 : $row['type'] = 'Лазерный';
-              break;
-              case 2 : $row['type'] = 'Струйный';
-              break;
-              case 3 : $row['type'] = 'Матричный';
-              break;
-              }
-              $xmlout .= "\t\t\t<Тип>" . $row['type'] . "</Тип>\n";
-              }
-
-              $xmlout .= "\t\t</Свойства>\n";
-              $xmlout .= "\t\t<Разделы>\n";
-
-              if ($row['parent_id'] == 30) {
-              $xmlout .= "\t\t\t<Раздел>Бумага</Раздел>\n";
-              }
-              if ($row['parent_id'] == 31) {
-              $xmlout .= "\t\t\t<Раздел>Категория1 3 уровень</Раздел>\n";
-              }
-              if ($row['parent_id'] == 32) {
-              $xmlout .= "\t\t\t<Раздел>Категория1 4 уровень</Раздел>\n";
-              }
-              if ($row['parent_id'] == 34) {
-              $xmlout .= "\t\t\t<Раздел>Принтеры</Раздел>\n";
-              }
-              $xmlout .= "\t\t</Разделы>\n";
-              $xmlout .= "\t</Товар>\n";
-              }
-              $xmlout .= "</Товары>";
-              file_put_contents("1.xml", $xmlout);
-             * 
-             */
+           
         }
     }
 

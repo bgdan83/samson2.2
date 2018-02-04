@@ -61,6 +61,7 @@ and open the template in the editor.
                     $ids = !$ids ? $id : rtrim($ids, ",");
                     $ids = rtrim($ids, ",");
                     $result = $db->get_product_all($ids);
+                    
                     if (isset($_GET['product_name']) or ( isset($_GET['min_price']) and isset($_GET['max_price']))) {
                         $db->filtr_name();
                         $db->filtr_price();
