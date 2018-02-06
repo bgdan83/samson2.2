@@ -40,13 +40,13 @@ class ModuleClass
     function get_product_all($ids)
     {
         if ($ids) {
-            $query = "SELECT product.product_name, price.price_value "
-                   . "FROM product "
-                   . "INNER JOIN price ON product.id = price.product_id "
-                   . "INNER JOIN product_to_category ptc ON product.id = ptc.product_id "
-                   . "AND ptc.category_id IN($ids) "
-                   // "AND product.parent_id IN($ids) "
-                   . "AND price.type = 'базовая'";
+            $query = "SELECT p.product_name, price.price_value
+                      FROM product p
+                      INNER JOIN product_to_category ptc ON p.id = ptc.product_id
+                      INNER JOIN category c ON ptc.category_id = c.id
+                                            AND c.id IN ($ids) 
+                      INNER JOIN price ON p.id = price.product_id  
+                                       AND price.type = 'базовая'";
         } else {
             $query = "SELECT product.product_name, price.price_value FROM product  "
                     . "INNER JOIN price ON product.id = price.product_id  "
