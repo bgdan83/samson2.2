@@ -233,8 +233,7 @@ class ModuleClass
                 $temp = 0;
                 $arr = ModuleClass::getCatId();
                 $arr = array_column($arr, 'category_name', 'id');
-                //print_r($arr);
-
+                
                 $query = "INSERT INTO product (
                         code, 
                         product_name)
@@ -249,12 +248,13 @@ class ModuleClass
                     echo "<p>Произошла ошибка.</p>";
                 }
                 $id = $this->mysqli->insert_id;
-
+                
                 foreach ($properties as $property) {
                     foreach ($property as $k => $v) {
                         $query = "INSERT INTO properties SET
                         product_id = '" . $id . "',
                         properties_name = '" . $k . "' , 
+                        units = '" . $v->attributes() . "' , 
                         properties_value = '" . $v . "'";
                         $sql = $this->mysqli->query($query);
                         if ($sql) {
@@ -264,7 +264,7 @@ class ModuleClass
                         }
                     }
                 }
-
+                
                 for ($i = 0, $j = count($price); $i < $j; $i++) {
                     $query = "INSERT INTO price SET
                         product_id = '" . $id . "',
@@ -290,6 +290,7 @@ class ModuleClass
                         echo "<p>Произошла ошибка.</p>";
                     }
                 }
+                 
             }
         }
     }
@@ -328,21 +329,27 @@ class ModuleClass
                 $properties = $xml->createElement("Свойства");
                 $product->appendChild($properties);
 
-                $stmt2 = $db->prepare("SELECT properties_name, properties_value "
+                $stmt2 = $db->prepare("SELECT properties_name, properties_value, units "
                                     . "FROM properties "
                                     . "WHERE product_id = '" . $row['id'] . "'");
                 $stmt2->execute();
                 while ($row2 = $stmt2->fetch()) {
+                    
                     $properties1 = $xml->createElement($row2['properties_name'], $row2['properties_value']);
+                    if (!empty($row2['units'])){
+                        $properties1->setAttribute("ЕдИзм", $row2['units']);
+                    }
                     $properties->appendChild($properties1);
+                    
+                    
                 }
 
                 $categories = $xml->createElement("Разделы");
                 $product->appendChild($categories);
                 $stmt3 = $db->prepare("SELECT c.category_name 
-                                        FROM category c 
-                                        INNER JOIN product_to_category ptg ON ptg.category_id = c.id
-                                        WHERE ptg.product_id = '" . $row['id'] . "'");
+                                       FROM category c 
+                                       INNER JOIN product_to_category ptg ON ptg.category_id = c.id
+                                       WHERE ptg.product_id = '" . $row['id'] . "'");
                 $stmt3->execute();
                 while ($row3 = $stmt3->fetch()) {
                     $category = $xml->createElement("Раздел", $row3['category_name']);
