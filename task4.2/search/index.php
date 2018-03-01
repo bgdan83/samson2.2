@@ -12,7 +12,12 @@ $APPLICATION->SetTitle("Поиск");
 		"USE_TITLE_RANK" => "N",
 		"DEFAULT_SORT" => "rank",
 		"arrFILTER" => array(
-			0 => "main",
+			0 => "forum",
+			1 => "iblock_news",
+			2 => "iblock_products",
+			3 => "iblock_vacancies",
+			4 => "iblock_action",
+			5 => "iblock_content",
 		),
 		"SHOW_WHERE" => "N",
 		"SHOW_WHEN" => "N",
@@ -33,18 +38,17 @@ $APPLICATION->SetTitle("Поиск");
 		"SHOW_ITEM_TAGS" => "Y",
 		"SHOW_ITEM_DATE_CHANGE" => "N",
 		"SHOW_ORDER_BY" => "N",
-		"SHOW_TAGS_CLOUD" => "N",
+		"SHOW_TAGS_CLOUD" => "Y",
 		"AJAX_OPTION_ADDITIONAL" => "",
 		"COMPONENT_TEMPLATE" => "clear",
 		"NO_WORD_LOGIC" => "N",
 		"FILTER_NAME" => "",
-		"arrFILTER_main" => array(
-		),
+		"arrFILTER_main" => "",
 		"USE_LANGUAGE_GUESS" => "Y",
 		"TAGS_INHERIT" => "Y",
-		"TAGS_SORT" => "CNT",
+		"TAGS_SORT" => "NAME",
 		"TAGS_PAGE_ELEMENTS" => "150",
-		"TAGS_PERIOD" => "100",
+		"TAGS_PERIOD" => "0",
 		"TAGS_URL_SEARCH" => "",
 		"FONT_MAX" => "50",
 		"FONT_MIN" => "10",
@@ -56,7 +60,36 @@ $APPLICATION->SetTitle("Поиск");
 		"WIDTH" => "100%",
 		"SHOW_RATING" => "",
 		"RATING_TYPE" => "",
-		"PATH_TO_USER_PROFILE" => ""
+		"PATH_TO_USER_PROFILE" => "",
+		"STRUCTURE_FILTER" => "structure",
+		"NAME_TEMPLATE" => "",
+		"SHOW_LOGIN" => "Y",
+		"PATH_TO_SONET_MESSAGES_CHAT" => "/company/personal/messages/chat/#USER_ID#/",
+		"arrFILTER_forum" => array(
+			0 => "all",
+		),
+		"arrFILTER_iblock_news" => array(
+			0 => "all",
+		),
+		"arrFILTER_iblock_products" => array(
+			0 => "all",
+		),
+		"arrFILTER_iblock_vacancies" => array(
+			0 => "all",
+		),
+		"arrFILTER_iblock_action" => array(
+			0 => "all",
+		),
+		"arrFILTER_iblock_content" => array(
+			0 => "all",
+		),
+		"arrFILTER_blog" => array(
+			0 => "all",
+		),
+		"arrFILTER_socialnetwork" => array(
+			0 => "all",
+		),
+		"arrFILTER_socialnetwork_user" => ""
 	),
 	false
 );?>
