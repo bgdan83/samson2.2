@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   `category_name` char(50) NOT NULL,
   `parent_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица test_rubric.price
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `price` (
   `type` char(50) NOT NULL DEFAULT '0.00',
   `price_value` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица test_rubric.product
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   `product_name` char(50) NOT NULL,
   `code` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=207 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=215 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица test_rubric.product_to_category
@@ -57,8 +57,9 @@ CREATE TABLE IF NOT EXISTS `properties` (
   `product_id` int(11) NOT NULL,
   `properties_name` char(50) NOT NULL,
   `properties_value` char(50) NOT NULL,
+  `units` char(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
