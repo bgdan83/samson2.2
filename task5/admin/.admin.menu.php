@@ -13,6 +13,13 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(), 
 		"" 
+	),
+	Array(
+		"Пользователи", 
+		"/admin/users/", 
+		Array(), 
+		Array(), 
+		"" 
 	)
 );
 ?>

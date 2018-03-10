@@ -16,6 +16,7 @@ if(!CModule::IncludeModule("iblock"))
 	return;
 }
 
+
 $arFilter = array(
 	"IBLOCK_ID" => $arParams["IBLOCKS"],
 	
@@ -27,20 +28,32 @@ $arOrder = array(
 
 $arSelect = array(
     "ID",
+	"IBLOCK_ID",
 	"NAME",
 	"DETAIL_PICTURE",
 	"DETAIL_TEXT",
+	"PROPERTY_*",
 );
 
+	
 $rsItems = CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);
-while($arItem = $rsItems -> GetNext())
+while($obElement = $rsItems -> GetNextElement())
 {
+	
+	$arItem = $obElement->GetFields();
+	
 	$arResult["ITEMS"][$arItem["ID"]] = array(
 		'ID' => $arItem["ID"],
 		'NAME' => $arItem["NAME"],
-		'DETAIL_PICTURE' => $arItem["DETAIL_PICTURE"],
+		'DETAIL_PICTURE' => CFile::GetFileArray($arItem["DETAIL_PICTURE"]),
 		'DETAIL_TEXT' => $arItem["DETAIL_TEXT"],
+		
 	);
+	
+	
+	$arResult["ITEMS"][$arItem["ID"]]["PROPERTIES"] = $obElement->GetProperties();
+		
+	
 }
 
 $this->IncludeComponentTemplate();

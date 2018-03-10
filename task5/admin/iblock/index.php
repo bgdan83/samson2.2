@@ -48,7 +48,7 @@ $APPLICATION->SetTitle("Инфоблоки");
 		"PARENT_SECTION_CODE" => "",
 		"PREVIEW_TRUNCATE_LEN" => "",
 		"PROPERTY_CODE" => array(
-			0 => "",
+			0 => "autor",
 			1 => "",
 		),
 		"SET_BROWSER_TITLE" => "Y",

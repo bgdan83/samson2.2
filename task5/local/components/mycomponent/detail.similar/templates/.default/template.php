@@ -14,25 +14,29 @@ $this->setFrameMode(true);
 ?>
 
 <?$idItem = $_REQUEST['ELEMENT_ID'];?>
+<img src="<?=$arResult["ITEMS"][$idItem]["DETAIL_PICTURE"]["SRC"]?>" style="float: left;"/>
 <?echo $arResult["ITEMS"][$idItem]["NAME"];?>
+<?foreach( $arResult["ITEMS"][$idItem]['PROPERTIES'] as $arProp):?>
+	<?if(!empty($arProp['VALUE'])):?>
+        <p><?=$arProp["NAME"]?>: <?=$arProp["VALUE"]?></p>
+	<?endif;?>
+<?endforeach;?>
+
 <p><?echo $arResult["ITEMS"][$idItem]["DETAIL_TEXT"];?></p>
 
 <?
 $tmpName =  preg_replace("|[,.:;]+|","", $arResult["ITEMS"][$idItem]["NAME"]);
-$tmpName = preg_replace("|\b[\d\w]{1,3}\b|i","",$tmpName); 
 $arName = explode(" ", $tmpName);
 unset($arResult["ITEMS"][$idItem]);
-
 ?>
-
+<div style="clear:both"></div>
 <h3>похожие новости:</h3>	
 <?foreach($arResult["ITEMS"] as $arItem):?>
 	<?foreach($arName as $name):?>
 	
-		<?if( (stripos($arItem{"NAME"}, substr($name, 0, 5))  !== false)):?>
-		
+		<?if( (stripos($arItem{"NAME"}, substr($name, 0, 5))  !== false) && strlen($name)>= 4):?>
 		<p><a href="<?=$APPLICATION->GetCurPageParam("ELEMENT_ID=". $arItem['ID'], array("ELEMENT_ID")); ?>"><?=$arItem["NAME"];?></a></p>
-		
+		<?break;?>
 		<?endif;?>	
 	<?endforeach;?>
 

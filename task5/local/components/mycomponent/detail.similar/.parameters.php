@@ -13,8 +13,19 @@ while($arRes = $db_iblock->Fetch())
 	$arIBlocks[$arRes["ID"]] = $arRes["NAME"];
 }
 
+$arProperty = array();
+$rsProp = CIBlockProperty::GetList(array("sort"=>"asc", "name"=>"asc"), array("ACTIVE"=>"Y", "IBLOCK_ID"=>1));
+while ($arr=$rsProp->Fetch())
+{
+	$arProperty[$arr['ID']] = $arr['NAME'];
+	
+}
+
+
 
 $arComponentParameters = array(
+    "GROUPS" => array(
+	),
 	"PARAMETERS"  =>  array(
 		"IBLOCK_TYPE"  =>  Array(
 			"PARENT" => "BASE",
@@ -31,6 +42,14 @@ $arComponentParameters = array(
 			"VALUES" => $arIBlocks,
 			"DEFAULT" => '',
 			"MULTIPLE" => "Y",
+		),
+		"PROPERTY_CODE" => array(
+			"PARENT" => "DATA_SOURCE",
+			"NAME" => GetMessage("T_IBLOCK_PROPERTY"),
+			"TYPE" => "LIST",
+			"MULTIPLE" => "Y",
+			"VALUES" => $arProperty,
+			"ADDITIONAL_VALUES" => "Y",
 		),
 	),
 );
