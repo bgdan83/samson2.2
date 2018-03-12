@@ -6,43 +6,58 @@ IncludeTemplateLangFile(__FILE__);
 				</div>
 				<div class="sb_sidebar">
 					<?$APPLICATION->IncludeComponent(
-	"bitrix:menu", 
-	"left_menu", 
-	array(
-		"ALLOW_MULTI_SELECT" => "N",
-		"CHILD_MENU_TYPE" => "left",
-		"DELAY" => "N",
-		"MAX_LEVEL" => "2",
-		"MENU_CACHE_GET_VARS" => array(
-		),
-		"MENU_CACHE_TIME" => "3600",
-		"MENU_CACHE_TYPE" => "N",
-		"MENU_CACHE_USE_GROUPS" => "Y",
-		"ROOT_MENU_TYPE" => "left",
-		"USE_EXT" => "Y",
-		"COMPONENT_TEMPLATE" => "left_menu"
-	),
-	false
-);?>
-					<div class="sb_event">
-						<div class="sb_event_header"><h4>Ближайшие события</h4></div>
-						<p><a href="">29 августа 2012, Москва</a></p>
-						<p>Семинар производителей мебели России и СНГ, Обсуждение тенденций.</p>
-					</div>
-					<div class="sb_action">
-						<a href=""><img src="<?=SITE_TEMPLATE_PATH?>/content/11.png" alt=""/></a>
-						<h4>Акция</h4>
-						<h5><a href="">Мебельная полка всего за 560 Р</a></h5>
-						<a href="" class="sb_action_more">Подробнее &rarr;</a>
-					</div>
-					<div class="sb_reviewed">
-							<img src="<?=SITE_TEMPLATE_PATH?>/content/8.png" class="sb_rw_avatar" alt=""/>
-							<span class="sb_rw_name">Сергей Антонов</span>
-							<span class="sb_rw_job">Руководитель финансового отдела “Банк+”</span>
-							<p>“Покупал офисные стулья и столы, остался очень доволен! Низкие цены, быстрая доставка, обслуживание на высоте! Спасибо!”</p>
-							<div class="clearboth"></div>
-							<div class="sb_rw_arrow"></div>
-					</div>
+						"bitrix:menu", 
+						"left_menu", 
+						array(
+							"ALLOW_MULTI_SELECT" => "N",
+							"CHILD_MENU_TYPE" => "left",
+							"DELAY" => "N",
+							"MAX_LEVEL" => "2",
+							"MENU_CACHE_GET_VARS" => array(
+							),
+							"MENU_CACHE_TIME" => "3600",
+							"MENU_CACHE_TYPE" => "N",
+							"MENU_CACHE_USE_GROUPS" => "Y",
+							"ROOT_MENU_TYPE" => "left",
+							"USE_EXT" => "Y",
+							"COMPONENT_TEMPLATE" => "left_menu"
+						),
+						false
+					);?>
+					
+					<?$APPLICATION->IncludeComponent(
+						"bitrix:main.include",
+						".default",
+						Array(
+							"AREA_FILE_SHOW" => "file",
+							"AREA_FILE_SUFFIX" => "inc",
+							"COMPONENT_TEMPLATE" => ".default",
+							"EDIT_TEMPLATE" => "",
+							"PATH" => "/include/events.php"
+						)
+					);?>
+					<?$APPLICATION->IncludeComponent(
+						"bitrix:main.include", 
+						".default", 
+						array(
+							"AREA_FILE_SHOW" => "file",
+							"AREA_FILE_SUFFIX" => "/include/action.php",
+							"EDIT_TEMPLATE" => "",
+							"COMPONENT_TEMPLATE" => ".default",
+							"PATH" => "/include/action.php"
+						),
+						false
+					);?>
+					<?$APPLICATION->IncludeComponent(
+						"bitrix:main.include",
+						"",
+						Array(
+							"AREA_FILE_SHOW" => "file",
+							"AREA_FILE_SUFFIX" => "inc",
+							"EDIT_TEMPLATE" => "",
+							"PATH" => "/include/comments.php"
+						)
+					);?>
 				</div>
 				<div class="clearboth"></div>
 			</div>
@@ -107,15 +122,15 @@ IncludeTemplateLangFile(__FILE__);
 												);?></span>
 						<strong><?=GetMessage("FOOTER_TIME")?></strong> <br/> 
 						<span class="workhours"><?$APPLICATION->IncludeComponent(
-	"bitrix:main.include",
-	"",
-	Array(
-		"AREA_FILE_SHOW" => "file",
-		"AREA_FILE_SUFFIX" => "inc",
-		"EDIT_TEMPLATE" => "",
-		"PATH" => "/include/workTime.php"
-	)
-);?></span><br/>
+													"bitrix:main.include",
+													"",
+													Array(
+														"AREA_FILE_SHOW" => "file",
+														"AREA_FILE_SUFFIX" => "inc",
+														"EDIT_TEMPLATE" => "",
+														"PATH" => "/include/workTime.php"
+													)
+												);?></span><br/>
 					</p>
 					<ul class="ft_solcial">
 						<li><a href="" class="fb"></a></li>

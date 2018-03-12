@@ -13,7 +13,7 @@
 $this->setFrameMode(true);
 ?>
 
-<?$idItem = $_REQUEST['ELEMENT_ID'];?>
+<?$idItem = htmlspecialcharsEx($_REQUEST['ELEMENT_ID']);?>
 <img src="<?=$arResult["ITEMS"][$idItem]["DETAIL_PICTURE"]["SRC"]?>" style="float: left;"/>
 <?echo $arResult["ITEMS"][$idItem]["NAME"];?>
 <?foreach( $arResult["ITEMS"][$idItem]['PROPERTIES'] as $arProp):?>
@@ -35,8 +35,9 @@ unset($arResult["ITEMS"][$idItem]);
 	<?foreach($arName as $name):?>
 	
 		<?if( (stripos($arItem{"NAME"}, substr($name, 0, 5))  !== false) && strlen($name)>= 4):?>
-		<p><a href="<?=$APPLICATION->GetCurPageParam("ELEMENT_ID=". $arItem['ID'], array("ELEMENT_ID")); ?>"><?=$arItem["NAME"];?></a></p>
-		<?break;?>
+			<p><a href="<?=$APPLICATION->GetCurPageParam("ELEMENT_ID=". $arItem['ID'], array("ELEMENT_ID")); ?>"><?=$arItem["NAME"];?></a></p>
+			<?break;?>
+		
 		<?endif;?>	
 	<?endforeach;?>
 
