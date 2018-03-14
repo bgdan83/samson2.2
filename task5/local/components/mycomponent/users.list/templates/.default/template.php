@@ -18,21 +18,9 @@ $this->setFrameMode(true);
 <input type="text" name="email">
 <input type="submit" value="Найти">
 </form>
-<?$search = "";?>
-<?if (!empty($_REQUEST["email"])):?>
-    <?$search = htmlspecialcharsEx($_REQUEST["email"]);?>
-    <?foreach($arResult["ITEMS"] as $arItem):?>
-	    <?if (array_search($search, $arItem)):?>
-		
-			<a href="<?=$arItem['DETAIL_PAGE_URL']?>"><?=$arItem['ID'],$arItem['LOGIN'],$arItem['NAME']."&nbsp".$arItem['LAST_NAME'],$arItem['EMAIL'], $arItem['LAST_LOGIN']; ?></a><br>
-			
-		<?endif;?>
-	<?endforeach;?>
 
-<?else:?>
-	
-	<?foreach($arResult["ITEMS"] as $arItem):?>
-		<a href="<?=$arItem['DETAIL_PAGE_URL']?>"><?=$arItem['ID'],$arItem['LOGIN'],$arItem['NAME']."&nbsp".$arItem['LAST_NAME'],$arItem['EMAIL'], $arItem['LAST_LOGIN']; ?></a><br>
-	<?endforeach;?>
+<?foreach($arResult["ITEMS"] as $arItem):?>
+	<a href="<?=$arItem['DETAIL_PAGE_URL']?>"><?=$arItem['ID'],$arItem['LOGIN'],$arItem['NAME']."&nbsp".$arItem['LAST_NAME'],$arItem['EMAIL'], $arItem['LAST_LOGIN']; ?></a><br>
+<?endforeach;?>
 					
-<?endif;?>
+

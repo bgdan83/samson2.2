@@ -13,35 +13,26 @@
 $this->setFrameMode(true);
 ?>
 
-<?$idItem = htmlspecialcharsEx($_REQUEST['ELEMENT_ID']);?>
-<img src="<?=$arResult["ITEMS"][$idItem]["DETAIL_PICTURE"]["SRC"]?>" style="float: left;"/>
-<?echo $arResult["ITEMS"][$idItem]["NAME"];?>
-<?foreach( $arResult["ITEMS"][$idItem]['PROPERTIES'] as $arProp):?>
+<img src="<?=$arResult["DETAIL_PICTURE"]["SRC"]?>" style="float: left;"/>
+<?echo $arResult["NAME"];?>
+<?foreach( $arItem['PROPERTIES'] as $arProp):?>
 	<?if(!empty($arProp['VALUE'])):?>
-        <p><?=$arProp["NAME"]?>: <?=$arProp["VALUE"]?></p>
+		<p><?=$arProp["NAME"]?>: <?=$arProp["VALUE"]?></p>
 	<?endif;?>
 <?endforeach;?>
 
-<p><?echo $arResult["ITEMS"][$idItem]["DETAIL_TEXT"];?></p>
+<p><?echo $arResult["DETAIL_TEXT"];?></p>
 
-<?
-$tmpName =  preg_replace("|[,.:;]+|","", $arResult["ITEMS"][$idItem]["NAME"]);
-$arName = explode(" ", $tmpName);
-unset($arResult["ITEMS"][$idItem]);
-?>
+
 <div style="clear:both"></div>
 <h3>похожие новости:</h3>	
-<?foreach($arResult["ITEMS"] as $arItem):?>
-	<?foreach($arName as $name):?>
-	
-		<?if( (stripos($arItem{"NAME"}, substr($name, 0, 5))  !== false) && strlen($name)>= 4):?>
-			<p><a href="<?=$APPLICATION->GetCurPageParam("ELEMENT_ID=". $arItem['ID'], array("ELEMENT_ID")); ?>"><?=$arItem["NAME"];?></a></p>
-			<?break;?>
+<?foreach($arResult["SIM"] as $arItem):?>
 		
-		<?endif;?>	
-	<?endforeach;?>
-
+<p><a href="<?=$arItem["DETAIL_LINK"]; ?>"><?=$arItem["NAME"];?></a></p>
+					
 <?endforeach;?>
-				
+
+
+
 		
 

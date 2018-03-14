@@ -11,17 +11,19 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 /** @global CMain $APPLICATION */
 
 
-$login = htmlspecialcharsEx($_REQUEST['LOGIN']);
+
 
 $filter = Array
 (
-   "LOGIN" => $login
+   "LOGIN" => $_REQUEST['LOGIN'],
+   "EMAIL" => $_REQUEST["email"],
 );
 $rsUsers = CUser::GetList(($by="last_login"), ($order="desc"), $filter);
-$page = $APPLICATION->GetCurPage();
+/* $page = $APPLICATION->GetCurPage();
 $arPage = explode("/", $page);
 $arPage[count($arPage)-1] = "";
-$page = implode("/", $arPage);
+$page = implode("/", $arPage); */
+$dir = $APPLICATION->GetCurDir();
 while($arItem = $rsUsers->GetNext())
 {
 	$arResult["ITEMS"][] = array(
@@ -30,7 +32,7 @@ while($arItem = $rsUsers->GetNext())
 							'NAME' => $arItem['NAME']."&nbsp".$arItem['LAST_NAME'],
 							'EMAIL' => $arItem["EMAIL"],
 							'LAST_LOGIN' => $arItem["LAST_LOGIN"],
-							'DETAIL_PAGE_URL' => $page .  $arItem['LOGIN'],
+							'DETAIL_PAGE_URL' => $dir .  $arItem['LOGIN'],
 	);		
 }
 

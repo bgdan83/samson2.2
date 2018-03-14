@@ -8,10 +8,10 @@ IncludeTemplateLangFile(__FILE__);
 	<?$APPLICATION->ShowHead();?>
 	<title><?$APPLICATION->ShowTitle()?></title>
 	<link rel="stylesheet" href="/local/templates/.default//template_style.css"/>
-	<script type="text/javascript" src="<?=SITE_TEMPLATE_PATH?>/js/jquery-1.8.2.min.js"></script>
-	<script type="text/javascript" src="<?=SITE_TEMPLATE_PATH?>/js/slides.min.jquery.js"></script>
-	<script type="text/javascript" src="<?=SITE_TEMPLATE_PATH?>/js/jquery.carouFredSel-6.1.0-packed.js"></script>
-	<script type="text/javascript" src="<?=SITE_TEMPLATE_PATH?>/js/functions.js"></script>
+	<script type="text/javascript" src="/local/templates/.default/js/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="/local/templates/.default/js/slides.min.jquery.js"></script>
+	<script type="text/javascript" src="/local/templates/.default/js/jquery.carouFredSel-6.1.0-packed.js"></script>
+	<script type="text/javascript" src="/local/templates/.default/js/functions.js"></script>
 	
 	<!--[if gte IE 9]><style type="text/css">.gradient {filter: none;}</style><![endif]-->
 </head>
