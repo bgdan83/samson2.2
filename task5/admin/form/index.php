@@ -29,7 +29,7 @@ $APPLICATION->SetTitle("");
 		),
 		"SEF_MODE" => "N",
 		"SHOW_ADDITIONAL" => "N",
-		"SHOW_ANSWER_VALUE" => "N",
+		"SHOW_ANSWER_VALUE" => "Y",
 		"SHOW_STATUS" => "Y",
 		"VIEW_URL" => "result_view.php",
 		"WEB_FORM_ID" => "3"

@@ -11,7 +11,7 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.ph
 		"AJAX_OPTION_HISTORY" => "N",
 		"CHAIN_ITEM_LINK" => "",
 		"CHAIN_ITEM_TEXT" => "",
-		"EDIT_ADDITIONAL" => "N",
+		"EDIT_ADDITIONAL" => "Y",
 		"EDIT_STATUS" => "Y",
 		"IGNORE_CUSTOM_TEMPLATE" => "N",
 		"LIST_URL" => "index.php",

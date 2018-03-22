@@ -2,7 +2,9 @@
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 ?>
 <?
-//test_dump($arResult)
+//test_dump($arResult);
+
+
 ?>
 <?
 if ($arParams["VIEW_URL"])
@@ -105,13 +107,35 @@ if ($arParams["VIEW_URL"])
 <?
 }
 ?>
-<p id="com"></p>
-<script>
+<?$dateCreate = MakeTimeStamp($arResult['arResultData']['DATE_CREATE'], "DD.MM.YYYY HH:MI:SS");?>
+<script type="text/javascript">
 $('#status_test').change(function(){
   if ($(this).val()=='2') {
-    $('#com').html("<?=$arResult['STATUS_COMMENT']['COMMENTS']?>"); 
+    $('#com').show(); 
+	setInterval(function(){
+		if($('textarea[name="form_textarea_ADDITIONAL_5"]').val() == "")
+		{
+			$('input[name="web_form_submit"]').prop("disabled", true);
+			$('input[name="web_form_apply"]').prop("disabled", true);
+		} else { 
+			 $('input[name="web_form_submit"]').prop("disabled", false);
+			 $('input[name="web_form_apply"]').prop("disabled", false);
+		}
+    },500);
+	var nowDate = Date.now() / 1000;
+	nowDate = Math.floor(nowDate);
+	var d = nowDate - <?=$dateCreate?> ;
+	var day = Math.floor(d / (3600 * 24));
+	var hours = Math.floor(d / 3600 % 24);
+	var min = Math.floor(d / 60 % 60);
+
+	$('input[name="form_text_ADDITIONAL_4"]').val( day + "д. " + hours + "ч. " + min + "мин. ");
   }
-});</script>
+  if ($(this).val()=='1') {
+    $('#com').hide();
+  }
+});
+</script>
 <table>
 <?
 if ($arResult["isFormDescription"] == "Y" || $arResult["isFormTitle"] == "Y" || $arResult["isFormImage"] == "Y")
@@ -163,7 +187,9 @@ if ($arResult["isFormImage"] == "Y")
 	<tbody>
 	<?
 	foreach ($arResult["QUESTIONS"] as $FIELD_SID => $arQuestion)
-	{
+	{ 
+	    if(($FIELD_SID == "comment") || ($FIELD_SID == "timeprocc")) 
+		{ continue; }
 	?>
 	<tr>
 		<td>
@@ -178,6 +204,20 @@ if ($arResult["isFormImage"] == "Y")
 	<?
 	} //endwhile
 	?>
+	<tr id="com" style="display:none">
+		<td >
+			<?=$arResult['QUESTIONS']['comment']["CAPTION"];?>
+			<?=$arResult["REQUIRED_SIGN"]?>	
+		</td>
+		<td><?=$arResult['QUESTIONS']['comment']["HTML_CODE"]?></td>
+	</tr>
+	<tr id="timeprocc" style="display:none">
+		<td >
+			<?=$arResult['QUESTIONS']['timeprocc']["CAPTION"]?>
+			
+		</td>
+		<td><?=$arResult['QUESTIONS']['timeprocc']["HTML_CODE"]?></td>
+	</tr>
 	</tbody>
 	<tfoot>
 	<tr>
@@ -189,6 +229,7 @@ if ($arResult["isFormImage"] == "Y")
 	</tr>
 	</tfoot>
 </table>
+
 <p>
 <?=$arResult["REQUIRED_SIGN"]?> - <?=GetMessage("FORM_REQUIRED_FIELDS")?>
 </p>

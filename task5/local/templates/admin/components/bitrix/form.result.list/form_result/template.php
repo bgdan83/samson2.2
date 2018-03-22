@@ -6,30 +6,7 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
 //echo "<pre>"; print_r($arResult["arrFORM_FILTER"]); echo "</pre>";
 ?>
-<script>
-<!--
-function Form_Filter_Click_<?=$arResult["filter_id"]?>()
-{
-	var sName = "<?=$arResult["tf_name"]?>";
-	var filter_id = "form_filter_<?=$arResult["filter_id"]?>";
-	var form_handle = document.getElementById(filter_id);
 
-	if (form_handle)
-	{
-		if (form_handle.className != "form-filter-none")
-		{
-			form_handle.className = "form-filter-none";
-			document.cookie = sName+"="+"none"+"; expires=Fri, 31 Dec 2030 23:59:59 GMT;";
-		}
-		else
-		{
-			form_handle.className = "form-filter-inline";
-			document.cookie = sName+"="+"inline"+"; expires=Fri, 31 Dec 2030 23:59:59 GMT;";
-		}
-	}
-}
-//-->
-</script>
 
 
  
@@ -38,18 +15,22 @@ function Form_Filter_Click_<?=$arResult["filter_id"]?>()
 if (strlen($arResult["FORM_ERROR"]) > 0) ShowError($arResult["FORM_ERROR"]);
 if (strlen($arResult["FORM_NOTE"]) > 0) ShowNote($arResult["FORM_NOTE"]);
 ?>
+
+
 <div id="content"></div>
-<p>
-<b>
-<a href="result_new.php" id="popupbutton">Создать</a></b>
-</p>
+
+
+<input type="button" id="popupbutton" value="Создать">
+
+<script type="text/javascript">
+    $('input[type="button"]').fancybox({type: 'ajax', href: 'result_new.php'});
+
+</script>
 <form name="rform_<?=$arResult["filter_id"]?>" method="post" action="<?=POST_FORM_ACTION_URI?>#nav_start">
 	<input type="hidden" name="WEB_FORM_ID" value="<?=$arParams["WEB_FORM_ID"]?>" />
 	<?=bitrix_sessid_post()?>
 
-	
-
-	
+		
 	<p>
 	<?=$arResult["pager"]?>
 	</p>
@@ -149,19 +130,19 @@ if (strlen($arResult["FORM_NOTE"]) > 0) ShowNote($arResult["FORM_NOTE"]);
 						
 								[&nbsp;<span id="btn<?=$arRes["ID"]?>"><?=$arRes["DATE_CREATE"]?></span>&nbsp;]
 								<script>  
-								$(document).ready(function(){  
-								  
-									$("#btn<?=$arRes["ID"]?>").click(function(){  
-										$.ajax({  
-											url: "<?=$arParams["EDIT_URL"].(strpos($arParams["EDIT_URL"], "?") === false ? "?" : "&")."RESULT_ID=".$arRes["ID"]."&WEB_FORM_ID=".$arParams["WEB_FORM_ID"];?>",  
-											cache: false,  
-											success: function(html){  
-												$("#content").html(html);  
-											}  
-										});  
-									});  	  
-								});  
-							</script>  
+									$(document).ready(function(){  
+									  
+										$("#btn<?=$arRes["ID"]?>").click(function(){  
+											$.ajax({  
+												url: "<?=$arParams["EDIT_URL"].(strpos($arParams["EDIT_URL"], "?") === false ? "?" : "&")."RESULT_ID=".$arRes["ID"]."&WEB_FORM_ID=".$arParams["WEB_FORM_ID"];?>",  
+												cache: false,  
+												success: function(html){  
+													$("#content").html(html);  
+												}  
+											});  
+										});  	  
+									});  
+								</script>  
 							
 						<?
 							}// endif(strlen(trim($EDIT_URL))>0);
@@ -169,10 +150,7 @@ if (strlen($arResult["FORM_NOTE"]) > 0) ShowNote($arResult["FORM_NOTE"]);
 						<?
 						}// endif($can_edit);
 						?>
-
-							
 						
-										
 				</td>
 				
 				<?

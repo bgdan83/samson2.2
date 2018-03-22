@@ -14,26 +14,7 @@ IncludeTemplateLangFile(__FILE__);
 	<script type="text/javascript" src="/local/templates/.default/js/functions.js"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="/local/templates/.default/js/fancybox/jquery.fancybox-1.3.4.css">
     <script type="text/javascript" src="/local/templates/.default/js/fancybox/jquery.fancybox-1.3.4.js"></script>
-	<script type="text/javascript">
-$(function() {
- 
-    $('#popupbutton').fancybox({
-        'padding': 37,
-        'overlayOpacity': 0.87,
-        'overlayColor': '#fff',
-        'transitionIn': 'none',
-        'transitionOut': 'none',
-        'titlePosition': 'inside',
-        'centerOnScroll': true,
-        'maxWidth': 400,
-        'minHeight': 310
- 
-    });
- 
-    
- 
-});
-</script>
+	
 	
 	<!--[if gte IE 9]><style type="text/css">.gradient {filter: none;}</style><![endif]-->
 </head>
