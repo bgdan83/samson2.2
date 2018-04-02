@@ -32,7 +32,7 @@ while($arItem = $rsUsers->GetNext())
 							'NAME' => $arItem['NAME']."&nbsp".$arItem['LAST_NAME'],
 							'EMAIL' => $arItem["EMAIL"],
 							'LAST_LOGIN' => $arItem["LAST_LOGIN"],
-							'DETAIL_PAGE_URL' => $dir .  $arItem['LOGIN'],
+							'DETAIL_PAGE_URL' => $dir .  mb_strtolower($arItem['LOGIN']),
 	);		
 }
 

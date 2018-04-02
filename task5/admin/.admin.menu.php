@@ -27,6 +27,27 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(), 
 		"" 
+	),
+	Array(
+		"Витрина", 
+		"/admin/rand_product/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Загрузка фото", 
+		"/admin/img_upload/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Новый юзер", 
+		"/admin/user_new/", 
+		Array(), 
+		Array(), 
+		"" 
 	)
 );
 ?>
