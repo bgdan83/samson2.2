@@ -4,13 +4,14 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Витрина");
 ?>
 <?
-$GLOBALS['arrFilter'] = array('!ID' => $_GET['ID']);
+
+$arrFilter = array('!ID' => $_GET['ID']);
 
 ?>
 <?$APPLICATION->IncludeComponent(
-	"bitrix:catalog.section",
-	"product_rand",
-	Array(
+	"bitrix:catalog.section", 
+	"product_rand", 
+	array(
 		"ACTION_VARIABLE" => "action",
 		"ADD_PICT_PROP" => "-",
 		"ADD_PROPERTIES_TO_BASKET" => "Y",
@@ -35,16 +36,17 @@ $GLOBALS['arrFilter'] = array('!ID' => $_GET['ID']);
 		"DISPLAY_COMPARE" => "N",
 		"DISPLAY_TOP_PAGER" => "Y",
 		"ELEMENT_SORT_FIELD" => "RAND",
-		"ELEMENT_SORT_FIELD2" => "",
-		"ELEMENT_SORT_ORDER" => "asc",
+		"ELEMENT_SORT_FIELD2" => "RAND",
+		"ELEMENT_SORT_ORDER" => "RAND",
 		"ELEMENT_SORT_ORDER2" => "asc",
 		"ENLARGE_PRODUCT" => "STRICT",
 		"USE_FILTER" => "Y",
 		"FILTER_NAME" => "arrFilter",
 		"IBLOCK_ID" => "2",
 		"IBLOCK_TYPE" => "products",
-		"INCLUDE_SUBSECTIONS" => "N",
-		"LABEL_PROP" => array(),
+		"INCLUDE_SUBSECTIONS" => "Y",
+		"LABEL_PROP" => array(
+		),
 		"LAZY_LOAD" => "N",
 		"LINE_ELEMENT_COUNT" => "3",
 		"LOAD_ON_SCROLL" => "N",
@@ -67,23 +69,32 @@ $GLOBALS['arrFilter'] = array('!ID' => $_GET['ID']);
 		"PAGER_TITLE" => "Товары",
 		"PAGE_ELEMENT_COUNT" => "10",
 		"PARTIAL_PRODUCT_PROPERTIES" => "N",
-		"PRICE_CODE" => array(),
+		"PRICE_CODE" => array(
+		),
 		"PRICE_VAT_INCLUDE" => "Y",
 		"PRODUCT_BLOCKS_ORDER" => "price,props,sku,quantityLimit,quantity,buttons,compare",
 		"PRODUCT_ID_VARIABLE" => "id",
-		"PRODUCT_PROPERTIES" => array(),
+		"PRODUCT_PROPERTIES" => array(
+		),
 		"PRODUCT_PROPS_VARIABLE" => "prop",
 		"PRODUCT_QUANTITY_VARIABLE" => "quantity",
 		"PRODUCT_ROW_VARIANTS" => "[{'VARIANT':'6','BIG_DATA':false},{'VARIANT':'3','BIG_DATA':false}]",
-		"PROPERTY_CODE" => array(0=>"SHOW_COUNTER",1=>"",),
-		"PROPERTY_CODE_MOBILE" => array(),
+		"PROPERTY_CODE" => array(
+			0 => "SHOW_COUNTER",
+			1 => "",
+		),
+		"PROPERTY_CODE_MOBILE" => array(
+		),
 		"RCM_PROD_ID" => $_REQUEST["PRODUCT_ID"],
 		"RCM_TYPE" => "personal",
 		"SECTION_CODE" => "",
 		"SECTION_ID" => "",
 		"SECTION_ID_VARIABLE" => "SECTION_ID",
 		"SECTION_URL" => "",
-		"SECTION_USER_FIELDS" => array(0=>"",1=>"",),
+		"SECTION_USER_FIELDS" => array(
+			0 => "",
+			1 => "",
+		),
 		"SEF_MODE" => "N",
 		"SET_BROWSER_TITLE" => "Y",
 		"SET_LAST_MODIFIED" => "N",
@@ -103,5 +114,6 @@ $GLOBALS['arrFilter'] = array('!ID' => $_GET['ID']);
 		"USE_MAIN_ELEMENT_SECTION" => "N",
 		"USE_PRICE_COUNT" => "N",
 		"USE_PRODUCT_QUANTITY" => "N"
-	)
+	),
+	false
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

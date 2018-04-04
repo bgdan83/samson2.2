@@ -1,18 +1,15 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 //test_dump($arResult['ITEMS']);
- $arFilter = array();
+ $ar = array();
  $i = 0;
  foreach ($arResult['ITEMS'] as $item)
  {
-	 $arFilter[$i] = $item['ID'];
+	 $ar[$i] = $item['ID'];
 	 $i++;
  }
-
- $arr = CUtil::PhpToJSObject($arFilter);
-
-//test_dump($arFilter);
+ $ar = CUtil::PhpToJSObject($ar);
 ?>
- 
+
 <?
 use \Bitrix\Main\Localization\Loc;
 
@@ -186,9 +183,9 @@ if ($arParams['HIDE_SECTION_DESCRIPTION'] !== 'Y')
 
 
 <?$bxajaxid = CAjax::GetComponentID($component->__name, $component->__template->__name);?>
-<?if($arResult["NAV_RESULT"]->nEndPage > 1 && $arResult["NAV_RESULT"]->NavPageNomer<$arResult["NAV_RESULT"]->nEndPage):?>
+<?if($arResult["NAV_RESULT"]->nEndPage > 1 && $arResult["NAV_RESULT"]->NavPageNomer < $arResult["NAV_RESULT"]->nEndPage):?>
 	<div id="btn_<?=$bxajaxid?>">
-		<a data-ajax-id="<?=$bxajaxid?>" href="javascript:void(0)" data-show-more="<?=$arResult["NAV_RESULT"]->NavNum?>" data-next-page="<?=($arResult["NAV_RESULT"]->NavPageNomer + 1)?>" data-max-page="<?=$arResult["NAV_RESULT"]->nEndPage?>">Показать еще </a>
+		<a data-ajax-id="<?=$bxajaxid?>" href="javascript:void(0)" data-show-more="<?=$arResult["NAV_RESULT"]->NavNum?>" data-next-page="<?=($arResult["NAV_RESULT"]->NavPageNomer)?>" data-max-page="<?=$arResult["NAV_RESULT"]->nEndPage?>">Показать еще </a>
 	</div>
 <?endif?>
 <script>
@@ -208,15 +205,16 @@ $(document).on('click', '[data-show-more]', function(){
         };
 		
         data['PAGEN_'+id] = page;
-        data['ID'] = <?=$arr?>;
+        data['ID'] = <?=$ar?>;
         $.ajax({
                 type: "GET",
                 url: window.location.href,
                 data: data,
-                timeout: 3000,
+                timeout: 1000,
                 success: function(data) {
                         $("#btn_"+bx_ajax_id).remove();
-		        $(block_id).append(data);
+		                $(block_id).append(data);
+				        $("#btn_"+bx_ajax_id).remove()
                 }
         });	
 		
@@ -240,6 +238,7 @@ $(document).on('click', '[data-show-more]', function(){
 		?>
 		<!-- items-container -->
 		<?
+		
 		foreach ($arResult['ITEM_ROWS'] as $rowData)
 		{
 			$rowItems = array_splice($arResult['ITEMS'], 0, $rowData['COUNT']);
@@ -814,6 +813,36 @@ $signer = new \Bitrix\Main\Security\Sign\Signer;
 $signedTemplate = $signer->sign($templateName, 'catalog.section');
 $signedParams = $signer->sign(base64_encode(serialize($arResult['ORIGINAL_PARAMETERS'])), 'catalog.section');
 ?>
+<script>
+
+function inWindow(s){
+  var scrollTop = $(window).scrollTop();
+  var windowHeight = $(window).height();
+  var currentEls = $(s);
+  var result = [];
+  currentEls.each(function(){
+    var el = $(this);
+    var offset = el.offset();
+    if(scrollTop <= offset.top && (el.height() * 0.7 + offset.top) < (scrollTop + windowHeight))
+      result.push(el.attr('href').split('/')[3]);
+  });
+  return $(result);
+}
+
+var boxesInWindow = inWindow("a.product-item-image-wrapper");
+
+$(function(){
+	$.ajax({
+	  url: '/ajax.php', 
+	  type: 'POST', 
+	  dataType: 'json', 
+	  data:  {'data':JSON.stringify(boxesInWindow)} 
+	});
+
+});
+</script>
+
+    
 <script>
 	BX.message({
 		BTN_MESSAGE_BASKET_REDIRECT: '<?=GetMessageJS('CT_BCS_CATALOG_BTN_MESSAGE_BASKET_REDIRECT')?>',
