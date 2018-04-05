@@ -18,7 +18,7 @@ if(!CModule::IncludeModule("iblock"))
 
 $arFilter = array(
 	"IBLOCK_ID" => $arParams["IBLOCKS"],
-	"ID" => $_REQUEST["ELEMENT_ID"],
+	"ID" => intval($_REQUEST["ELEMENT_ID"]),
 );
 
 $arOrder = array(

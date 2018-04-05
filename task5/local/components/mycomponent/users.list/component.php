@@ -15,8 +15,8 @@ if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 
 $filter = Array
 (
-   "LOGIN" => $_REQUEST['LOGIN'],
-   "EMAIL" => $_REQUEST["email"],
+   "LOGIN" => htmlspecialcharsEx($_REQUEST['LOGIN']),
+   "EMAIL" => htmlspecialcharsEx($_REQUEST["email"]),
 );
 $rsUsers = CUser::GetList(($by="last_login"), ($order="desc"), $filter);
 /* $page = $APPLICATION->GetCurPage();
