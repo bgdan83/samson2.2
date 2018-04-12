@@ -30,7 +30,7 @@ class UserLastRegistration extends CBitrixComponent
 															'EMAIL',
 															'LAST_LOGIN',
 															'DATE_REGISTER'),
-										'filter'  => array ( 'LID' => s1),
+										'filter'  => array ( 'LID' => SITE_ID),
 										'order'   => array('DATE_REGISTER' => 'DESC'),
 										'limit'   => 3, 
 										
