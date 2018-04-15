@@ -47,15 +47,16 @@ IncludeTemplateLangFile(__FILE__);
 												);?></span>	<br/>	
 							<?=GetMessage('WORK_TIME')?> 
 							<span class="workhours"><?$APPLICATION->IncludeComponent(
-	"bitrix:main.include",
-	"",
-	Array(
-		"AREA_FILE_SHOW" => "file",
-		"AREA_FILE_SUFFIX" => "inc",
-		"EDIT_TEMPLATE" => "",
-		"PATH" => "/include/workTime.php"
-	)
-);?></span>						
+															"bitrix:main.include",
+															"",
+															Array(
+																"AREA_FILE_SHOW" => "file",
+																"AREA_FILE_SUFFIX" => "inc",
+																"EDIT_TEMPLATE" => "",
+																"PATH" => "/include/workTime.php"
+															)
+														);?></span>	
+                            <?=$APPLICATION->ShowViewContent('name_view_product')?>														
 						</td>
 						<td style="width:232px">
 							<form action="">

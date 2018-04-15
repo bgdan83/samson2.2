@@ -19,7 +19,7 @@ use \Bitrix\Main\UserTable;
 class UserLastRegistration extends CBitrixComponent
 {
 
-	function listUsers()
+	function listUsers(int $limit, array $filter)
 	{
 		
 		$rsUsers = UserTable::getList(array(
@@ -30,9 +30,9 @@ class UserLastRegistration extends CBitrixComponent
 															'EMAIL',
 															'LAST_LOGIN',
 															'DATE_REGISTER'),
-										'filter'  => array ( 'LID' => SITE_ID),
+										'filter'  => $filter,
 										'order'   => array('DATE_REGISTER' => 'DESC'),
-										'limit'   => 3, 
+										'limit'   => $limit, 
 										
 									));
 
@@ -59,7 +59,7 @@ class UserLastRegistration extends CBitrixComponent
 	{ 
 	    if($this->StartResultCache(false)){
 
-			$this -> arResult = $this->listUsers();
+			$this -> arResult = $this->listUsers(3, array('LID' => SITE_ID));
 
 			$this -> IncludeComponentTemplate();
 		}
