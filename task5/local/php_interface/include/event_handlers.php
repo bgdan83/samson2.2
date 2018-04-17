@@ -6,7 +6,7 @@ AddEventHandler('main', 'OnBeforeEventSend', Array("MyClass", "my_OnBeforeEventS
 
 class MyClass
 {
-	const CACHE_PATH_LAST_USER_REG = '/bitrix/cache/s1/mycomponent/user_last_registration';
+	const CACHE_PATH_LAST_USER_REG = '/s1/mycomponent/user_last_registration';
     // создаем обработчик события "OnBeforeUserAdd"
     function OnBeforeUserAddHandler(&$arFields)
     { 
@@ -58,7 +58,7 @@ class MyClass
 				);
 				CEvent::Send("NEW_USER_DATA", SITE_ID, $arEventFields);
 			}
-			DeleteDirFilesEx(self::CACHE_PATH_LAST_USER_REG);
+			BXClearCache(true, self::CACHE_PATH_LAST_USER_REG);
 		}
     }
 	

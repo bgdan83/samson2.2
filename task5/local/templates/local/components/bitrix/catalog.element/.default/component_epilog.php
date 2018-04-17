@@ -128,3 +128,8 @@ if (isset($templateData['JS_OBJ']))
 		<?
 	}
 }
+?>
+
+<?$this->__template->SetViewTarget('name_view_product');?>
+   <?=$arResult['NAME']?>
+<?$this->__template->EndViewTarget('name_view_product');?>	

@@ -167,9 +167,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			<div class="row">
 				<div class="col-xs-12">
 					<h1 class="bx-title">
-					    <?$this->SetViewTarget('name_view_product');?>
 					       <?=$name?>
-						<?$this->EndViewTarget('name_view_product');?>	
 					</h1>
 				</div>
 			</div>
