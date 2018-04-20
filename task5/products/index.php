@@ -49,8 +49,9 @@ $APPLICATION->SetTitle("Продукция");
 		"LIST_META_DESCRIPTION" => "-",
 		"LIST_BROWSER_TITLE" => "-",
 		"DETAIL_PROPERTY_CODE" => array(
-			0 => "SHOW_COUNTER",
-			1 => "",
+			0 => "PRICE",
+			1 => "SHOW_COUNTER",
+			2 => "",
 		),
 		"DETAIL_META_KEYWORDS" => "-",
 		"DETAIL_META_DESCRIPTION" => "-",

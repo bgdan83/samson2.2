@@ -1,5 +1,9 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+//$APPLICATION->AddHeadScript($templateFolder."/js/form_script.js");
+use Bitrix\Main\Page\Asset;
+Asset::getInstance()->addJs($templateFolder . "/js/form_script.js",true);
+
 use Bitrix\Main\Loader;
 
 /**
@@ -131,5 +135,5 @@ if (isset($templateData['JS_OBJ']))
 ?>
 
 <?$this->__template->SetViewTarget('name_view_product');?>
-   <?=$arResult['NAME']?>
-<?$this->__template->EndViewTarget('name_view_product');?>	
+   <?=$arResult['NAME'];?>
+<?$this->__template->EndViewTarget();?>	

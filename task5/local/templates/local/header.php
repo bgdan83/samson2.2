@@ -5,14 +5,16 @@ IncludeTemplateLangFile(__FILE__);
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-	<?$APPLICATION->ShowHead();?>
+	
 	<title><?$APPLICATION->ShowTitle()?></title>
 	<link rel="stylesheet" href="/local/templates/.default//template_style.css"/>
 	<script type="text/javascript" src="/local/templates/.default/js/jquery-1.8.2.min.js"></script>
 	<script type="text/javascript" src="/local/templates/.default/js/slides.min.jquery.js"></script>
 	<script type="text/javascript" src="/local/templates/.default/js/jquery.carouFredSel-6.1.0-packed.js"></script>
 	<script type="text/javascript" src="/local/templates/.default/js/functions.js"></script>
-	
+	<link rel="stylesheet" type="text/css" media="all" href="/local/templates/.default/js/fancybox/jquery.fancybox-1.3.4.css">
+    <script type="text/javascript" src="/local/templates/.default/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+	<?$APPLICATION->ShowHead();?>
 	<!--[if gte IE 9]><style type="text/css">.gradient {filter: none;}</style><![endif]-->
 </head>
 <body>

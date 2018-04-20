@@ -1,5 +1,7 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
+
+//test_dump($arResult, true);
 use \Bitrix\Main\Localization\Loc;
 
 /**
@@ -174,6 +176,32 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			<?
 		}
 		?>
+		
+		<div style="display:none">
+			<form id="login_form" method="post" action="">
+				<p id="login_error">Пожалуйста, заполните все поля</p>		
+				<p>
+					<label for="like_price">Желаемая цена </label>
+					<input type="text" id="like_price" name="like_price" size="30" />
+				</p>
+				<p>
+					<label for="fio">ФИО </label>
+					<input type="text" id="fio" name="fio" size="30" value="<?=$arResult['USER']['NAME']?>" />
+				</p>
+				<p>
+					<label for="phone">Телефон +7</label>
+					<input type="text" id="phone" name="phone" size="30" value="<?=$arResult['USER']['PERSONAL_PHONE']?>"/>
+				</p>
+				<p>
+					<input type="submit" value="Отправить" />
+				</p>
+				
+			</form>
+        </div>
+		
+    <a href="#login_form" rel="nofollow" id="tip5">Хочу дешевле</a>
+
+
 		<div class="row">
 			<div class="col-md-6 col-sm-12">
 				<div class="product-item-detail-slider-container" id="<?=$itemIds['BIG_SLIDER_ID']?>">
@@ -317,7 +345,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 												<?
 												foreach ($arResult['SKU_PROPS'] as $skuProperty)
 												{
-													if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']]))
+												if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']]))
 														continue;
 
 													$propertyId = $skuProperty['ID'];
@@ -1818,4 +1846,4 @@ if ($arParams['DISPLAY_COMPARE'])
 	var <?=$obName?> = new JCCatalogElement(<?=CUtil::PhpToJSObject($jsParams, false, true)?>);
 </script>
 <?
-unset($actualItem, $itemIds, $jsParams);
+unset($actualItem, $itemIds, $jsParams);;
