@@ -49,7 +49,7 @@ $APPLICATION->SetTitle("Продукция");
 		"LIST_META_DESCRIPTION" => "-",
 		"LIST_BROWSER_TITLE" => "-",
 		"DETAIL_PROPERTY_CODE" => array(
-			0 => "PRICE",
+			0 => "ARTNUMBER",
 			1 => "SHOW_COUNTER",
 			2 => "",
 		),

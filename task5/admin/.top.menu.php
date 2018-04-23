@@ -13,6 +13,13 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(), 
 		"" 
+	),
+	Array(
+		"Цена ниже", 
+		"/admin/lowprice/", 
+		Array(), 
+		Array(), 
+		"" 
 	)
 );
 ?>

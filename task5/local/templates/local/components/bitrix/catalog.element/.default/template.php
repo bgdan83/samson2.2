@@ -33,6 +33,7 @@ $templateData = array(
 	'CURRENCIES' => $currencyList,
 	'ITEM' => array(
 		'ID' => $arResult['ID'],
+		'NAME' => $arResult['NAME'],
 		'IBLOCK_ID' => $arResult['IBLOCK_ID'],
 		'OFFERS_SELECTED' => $arResult['OFFERS_SELECTED'],
 		'JS_OFFERS' => $arResult['JS_OFFERS']
@@ -159,6 +160,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 	}
 }
 ?>
+
 <div class="bx-catalog-element bx-<?=$arParams['TEMPLATE_THEME']?>" id="<?=$itemIds['ID']?>"
 	itemscope itemtype="http://schema.org/Product">
 	<div class="container-fluid">
@@ -192,6 +194,10 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 					<label for="phone">Телефон +7</label>
 					<input type="text" id="phone" name="phone" size="30" value="<?=$arResult['USER']['PERSONAL_PHONE']?>"/>
 				</p>
+				<input type="hidden" name="name_goods" value="<?=$arResult['NAME']?>">
+				<input type="hidden" name="vendor_code" value="<?=$arResult['PROPERTIES']['ARTNUMBER']['VALUE']?>">
+				<input type="hidden" name="link_goods" value="<?=$arResult['ORIGINAL_PARAMETERS']['CURRENT_BASE_PAGE']?>">
+				
 				<p>
 					<input type="submit" value="Отправить" />
 				</p>

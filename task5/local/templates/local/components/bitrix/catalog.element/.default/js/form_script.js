@@ -18,6 +18,7 @@ $(document).ready(function(){
 		//$.fancybox.showActivity();
 		var $that = $(this),
 		fData = $that.serialize(); 
+		console.log(fData);
 		$.ajax({
 		    url: "/ajax/low_price/ajax.php", 
 		    type: $that.attr('method'), 
