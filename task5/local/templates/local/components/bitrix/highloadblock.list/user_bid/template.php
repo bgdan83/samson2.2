@@ -38,8 +38,11 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			$th_class = 'reports-head-cell';
 		}
 		
-        if ($col != 'ID')
-	    { 
+        if ($col == 'ID')
+	    {
+            continue;			
+	    }
+		else {
 			// title
 			$arUserField = $arResult['fields'][$col];
 			$title = $arUserField["LIST_COLUMN_LABEL"]? $arUserField["LIST_COLUMN_LABEL"]: $col;
@@ -98,8 +101,11 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 		{
 			$td_class .= ' reports-numeric-column';
 		}
-        if ($col != 'ID')
+        if ($col == 'ID')
 	    {
+            continue;			
+	    }
+		else {
 		    $finalValue = $row[$col];
         }
 		if ($col === 'ID' && !empty($arParams['DETAIL_URL']))

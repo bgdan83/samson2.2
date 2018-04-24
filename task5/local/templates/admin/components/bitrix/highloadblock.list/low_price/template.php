@@ -11,14 +11,39 @@ if (!empty($arResult['ERROR']))
 $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highloadblock.css');
 
 //$GLOBALS['APPLICATION']->SetTitle('Highloadblock List');
-
+test_dump['$_POST'];
 ?>
-
+<form action="" method="post">
+    <label>Состояние </label>
+    <select name="cond">
+    <option value="0">Новый</option>
+    <option value="1">Обработан</option>
+    </select>
+	<input type="submit" value="Submit">
+</form>
+<form action="" method="post">
+    <label>Дата </label>
+	<input type="text" name="date" placeholder="24.04.2018">
+	<input type="submit" value="Submit">
+</form>
+<form action="" method="post">
+	<label>Артикул </label>
+	<input type="text" name="vendor_code">
+    <input type="submit" value="Submit">
+</form>
+<form action="" method="post">
+    <label>Сортировка по дате </label>
+    <select name="date_sort">
+    <option value="ASC">Возростание</option>
+    <option value="DESC">Убывание</option>
+    </select>
+	<input type="submit" value="Submit">
+</form>
 <div class="reports-result-list-wrap">
 <div class="report-table-wrap">
 <div class="reports-list-left-corner"></div>
 <div class="reports-list-right-corner"></div>
-<table cellspacing="0" class="reports-list-table" id="report-result-table">
+<table cellspacing="2" class="reports-list-table" id="report-result-table">
 	<!-- head -->
 	<tr>
 		<? $i = 0; foreach(array_keys($arResult['tableColumns']) as $col): ?>
@@ -37,11 +62,15 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 		{
 			$th_class = 'reports-head-cell';
 		}
-
+        if ($col == 'ID' || $col == 'UF_LINK_GOODS' || $col == 'UF_COMMENT')
+	    {  
+	        continue;
+		}
+	    else {
 		// title
-		$arUserField = $arResult['fields'][$col];
-		$title = $arUserField["LIST_COLUMN_LABEL"]? $arUserField["LIST_COLUMN_LABEL"]: $col;
-
+		    $arUserField = $arResult['fields'][$col];
+		    $title = $arUserField["LIST_COLUMN_LABEL"]? $arUserField["LIST_COLUMN_LABEL"]: $col;
+        }
 		// sorting
 		$defaultSort = 'DESC';
 		//$defaultSort = $col['defaultSort'];
@@ -96,9 +125,13 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 		{
 			$td_class .= ' reports-numeric-column';
 		}
-
-		$finalValue = $row[$col];
-
+        if ($col == 'ID' || $col == 'UF_LINK_GOODS' || $col == 'UF_COMMENT')
+	    {  
+	        continue;
+		}
+	    else {
+		    $finalValue = $row[$col];
+        }
 		if ($col === 'ID' && !empty($arParams['DETAIL_URL']))
 		{
 			$url = str_replace(
