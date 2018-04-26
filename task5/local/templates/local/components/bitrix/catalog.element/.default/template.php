@@ -1,6 +1,5 @@
 <? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
-
-
+ 
 //test_dump($arResult, true);
 use \Bitrix\Main\Localization\Loc;
 
@@ -196,8 +195,11 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 				</p>
 				<input type="hidden" name="name_goods" value="<?=$arResult['NAME']?>">
 				<input type="hidden" name="vendor_code" value="<?=$arResult['PROPERTIES']['ARTNUMBER']['VALUE']?>">
-				<input type="hidden" name="link_goods" value="<?=$arResult['ORIGINAL_PARAMETERS']['CURRENT_BASE_PAGE']?>">
-				
+				<input type="hidden" name="site_price" value="<?=$arResult['PROPERTIES']['PRICE']['VALUE']?>">
+				<input type="hidden" name="user_login" value="<?=$arResult['USER']['LOGIN']?>">
+				<input type="hidden" name="user_id" value="<?=$USER->GetID()?>">
+				<input type="hidden" name="link_goods" value="<?=$arResult['DETAIL_PAGE_URL']?>">
+				<input type="hidden" name="photo"      value="<?=$arResult['DETAIL_PICTURE']['SRC']?>">
 				<p>
 					<input type="submit" value="Отправить" />
 				</p>

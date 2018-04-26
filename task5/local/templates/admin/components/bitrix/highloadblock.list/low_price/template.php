@@ -11,7 +11,7 @@ if (!empty($arResult['ERROR']))
 $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highloadblock.css');
 
 //$GLOBALS['APPLICATION']->SetTitle('Highloadblock List');
-test_dump['$_POST'];
+
 ?>
 <form action="" method="post">
     <label>Состояние </label>
@@ -34,7 +34,7 @@ test_dump['$_POST'];
 <form action="" method="post">
     <label>Сортировка по дате </label>
     <select name="date_sort">
-    <option value="ASC">Возростание</option>
+    <option value="ASC">Возрастание</option>
     <option value="DESC">Убывание</option>
     </select>
 	<input type="submit" value="Submit">
@@ -43,6 +43,7 @@ test_dump['$_POST'];
 <div class="report-table-wrap">
 <div class="reports-list-left-corner"></div>
 <div class="reports-list-right-corner"></div>
+
 <table cellspacing="2" class="reports-list-table" id="report-result-table">
 	<!-- head -->
 	<tr>
@@ -62,7 +63,16 @@ test_dump['$_POST'];
 		{
 			$th_class = 'reports-head-cell';
 		}
-        if ($col == 'ID' || $col == 'UF_LINK_GOODS' || $col == 'UF_COMMENT')
+        if ($col == 'ID' 
+		    || $col == 'UF_LINK_GOODS' 
+		    || $col == 'UF_COMMENT' 
+			|| $col == 'UF_DATE_TIME_BID'
+			|| $col == 'UF_SITE_PRICE'
+			|| $col == 'UF_PHOTO'
+			|| $col == 'UF_LIKE_PRICE'
+			|| $col == 'UF_PHONE'
+			|| $col == 'UF_FIO_USER'
+			|| $col == 'UF_LINK_USER')
 	    {  
 	        continue;
 		}
@@ -125,7 +135,16 @@ test_dump['$_POST'];
 		{
 			$td_class .= ' reports-numeric-column';
 		}
-        if ($col == 'ID' || $col == 'UF_LINK_GOODS' || $col == 'UF_COMMENT')
+        if ($col == 'ID' 
+		    || $col == 'UF_LINK_GOODS' 
+			|| $col == 'UF_COMMENT' 
+			|| $col == 'UF_DATE_TIME_BID'
+			|| $col == 'UF_SITE_PRICE'
+			|| $col == 'UF_PHOTO'
+			|| $col == 'UF_LIKE_PRICE'
+			|| $col == 'UF_FIO_USER'
+			|| $col == 'UF_PHONE'
+			|| $col == 'UF_LINK_USER')
 	    {  
 	        continue;
 		}
@@ -144,7 +163,12 @@ test_dump['$_POST'];
 		}
 
 		?>
-		<td class="<?=$td_class?>"><?=$finalValue?></td>
+		<td class="<?=$td_class?>"><span class="btn<?=$row['ID']?>"><?=$finalValue?></span></td>
+		<script>
+			$(document).ready(function(){  
+			    $('.btn<?=$row['ID']?>').fancybox({type: 'ajax', href: "detail.php?ID=<?=$row['ID']?>"});
+			})
+		</script>
 		<? endforeach; ?>
 	</tr>
 	<? endforeach; ?>

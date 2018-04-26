@@ -38,7 +38,14 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			$th_class = 'reports-head-cell';
 		}
 		
-        if ($col == 'ID')
+        if ($col == 'ID' 
+		    || $col == 'UF_DATE_TIME_BID'
+		    || $col == 'UF_SITE_PRICE'
+		    || $col == 'UF_LINK_USER'
+			|| $col == 'UF_PHOTO'
+			|| $col == 'UF_LIKE_PRICE'
+			|| $col == 'UF_FIO_USER'
+			|| $col == 'UF_PHONE')
 	    {
             continue;			
 	    }
@@ -101,11 +108,19 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 		{
 			$td_class .= ' reports-numeric-column';
 		}
-        if ($col == 'ID')
+        if ($col == 'ID' 
+		    || $col == 'UF_DATE_TIME_BID'
+			|| $col == 'UF_SITE_PRICE'
+			|| $col == 'UF_LINK_USER'
+			|| $col == 'UF_PHOTO'
+			|| $col == 'UF_LIKE_PRICE'
+			|| $col == 'UF_FIO_USER'
+			|| $col == 'UF_PHONE')
 	    {
             continue;			
 	    }
-		else {
+		else 
+		{
 		    $finalValue = $row[$col];
         }
 		if ($col === 'ID' && !empty($arParams['DETAIL_URL']))

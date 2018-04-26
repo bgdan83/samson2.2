@@ -4,6 +4,9 @@ use \Bitrix\Main\UserGroupTable;
 AddEventHandler("main", "OnBeforeUserAdd", Array("MyClass", "OnBeforeUserAddHandler"));
 AddEventHandler('main', 'OnBeforeEventSend', Array("MyClass", "my_OnBeforeEventSend"));
 
+$eventManager = \Bitrix\Main\EventManager::getInstance();
+$eventManager->addEventHandler('', 'LowPriceOnAfterUpdate', Array("MyClass",'afterUpdate'));
+
 class MyClass
 {
 	const CACHE_PATH_LAST_USER_REG = '/s1/mycomponent/user_last_registration';
@@ -37,7 +40,7 @@ class MyClass
 									'select' => array('EMAIL'),
 									'filter' => array(
 													  "UserGroupTable:USER.GROUP_ID"=>1,
-												),
+									),
             ));
 			$arEmail = array();
 			while($arUser = $rsUsers->fetch())
@@ -62,14 +65,60 @@ class MyClass
 		}
     }
 	
-	 function my_OnBeforeEventSend(&$arFields, $arTemplate)
-   {
+	function my_OnBeforeEventSend(&$arFields, $arTemplate)
+    {
         $domen = substr($arFields["EMAIL"], strrpos($arFields["EMAIL"], '@') + 1);
         if($domen == "yandex.ru")
 		{
 			unset($arFields['EMAIL']);
 		}
          
-   } 
+    }
+
+    function afterUpdate(\Bitrix\Main\Entity\Event $event)
+    {
+        $id = $event->getParameter("id");
+		test_dump($id);
+		$entity = $event->getEntity();
+        $entityDataClass = $entity->GetDataClass();
+		
+		$rsData = $entityDataClass::getList(
+			array(
+				"select" => array(
+				                'UF_VENDOR_CODE',
+				                'UF_DATE_BID',
+								'UF_COMMENT',
+								'UF_DATE_TIME_COMMENT',
+								'UF_USER_ID'
+				),
+				"filter" => array('ID' => $id['ID'])
+			)
+		);
+			 
+		if ($arData = $rsData -> Fetch()){
+			$rsUsers = UserTable::getList(array(
+									'select' => array('EMAIL'),
+									'filter' => array(
+													  "ID"=>$arData['UF_USER_ID'],
+									),
+            ));
+			
+			if($arUser = $rsUsers->fetch())
+			{
+				$email = $arUser['EMAIL'];	
+				$arEventFields = array(
+				        "EMAIL" => $email,
+				        "VENDOR_CODE" => $arData["UF_VENDOR_CODE"],
+						"DATE_BID" => $arData["UF_DATE_BID"],
+						"COMMENT" => $arData["UF_COMMENT"],
+						"DATE_TIME_COMMENT" => $arData["UF_DATE_TIME_COMMENT"],
+						
+				);
+				CEvent::Send("LOW_PRICE_BID", SITE_ID, $arEventFields);
+			}
+		}
+    }	
 }
+
+
 ?>

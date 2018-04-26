@@ -22,17 +22,18 @@ if(isset($_POST['date_sort']))
    
 }
 ?><?$APPLICATION->IncludeComponent(
-	"bitrix:highloadblock.list",
-	"low_price",
-	Array(
+	"bitrix:highloadblock.list", 
+	"low_price", 
+	array(
 		"BLOCK_ID" => "1",
 		"CHECK_PERMISSIONS" => "N",
 		"COMPONENT_TEMPLATE" => "low_price",
 		"DETAIL_URL" => "detail.php?ID=#ID#",
 		"FILTER_NAME" => "arrFilter",
 		"PAGEN_ID" => "page",
-		"ROWS_PER_PAGE" => "",
-		"SORT_FIELD" => "ID",
+		"ROWS_PER_PAGE" => "20",
+		"SORT_FIELD" => "UF_DATE_BID",
 		"SORT_ORDER" => $date_sort
-	)
+	),
+	false
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

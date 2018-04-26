@@ -15,6 +15,7 @@ $rsUsers = \Bitrix\Main\UserTable::getList(array(
 														'LAST_NAME',
 														'SECOND_NAME',
 														'PERSONAL_PHONE',
+														'LOGIN',
                                     ),
 									'filter'  => array('LID' => SITE_ID,
 													   'ID' => $userId
@@ -28,6 +29,7 @@ while($arItem = $rsUsers->fetch())
 							'NAME' => $arItem['NAME']
 								."&nbsp".$arItem['LAST_NAME']
 								."&nbsp".$arItem['SECOND_NAME'],
-							'PERSONAL_PHONE' => $arItem['PERSONAL_PHONE']
+							'PERSONAL_PHONE' => $arItem['PERSONAL_PHONE'],
+							'LOGIN' => $arItem['LOGIN']
 	);		
 }
