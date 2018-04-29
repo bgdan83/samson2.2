@@ -7,13 +7,15 @@ if (!empty($arResult['ERROR']))
 	echo $arResult['ERROR'];
 	return false;
 }
+//test_dump($arResult);
+
 
 $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highloadblock.css');
 
 //$GLOBALS['APPLICATION']->SetTitle('Highloadblock List');
 
 ?>
-<form action="" method="post">
+<form action="" method="get">
     <label>Состояние </label>
     <select name="cond">
     <option value="0">Новый</option>
@@ -21,17 +23,17 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
     </select>
 	<input type="submit" value="Submit">
 </form>
-<form action="" method="post">
+<form action="" method="get">
     <label>Дата </label>
 	<input type="text" name="date" placeholder="24.04.2018">
 	<input type="submit" value="Submit">
 </form>
-<form action="" method="post">
+<form action="" method="get">
 	<label>Артикул </label>
 	<input type="text" name="vendor_code">
     <input type="submit" value="Submit">
 </form>
-<form action="" method="post">
+<form action="" method="get">
     <label>Сортировка по дате </label>
     <select name="date_sort">
     <option value="ASC">Возрастание</option>
@@ -39,6 +41,31 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
     </select>
 	<input type="submit" value="Submit">
 </form>
+<form method="post"  action="">
+	<label>Экспорт в XML</label>
+	<input type="submit" value="Выгрузить" name='button'>
+</form>
+
+<?
+if (isset($_POST['button'])) {
+
+	$xml = new DOMDocument("1.0", "windows-1251");
+	$bids = $xml->appendChild($xml->createElement("Заявки"));
+	foreach ($arResult['fields'] as $row) {
+		$bid = $xml->createElement("Заявка");
+		$bids->appendChild($bid);
+		foreach ($row as $key => $val) {
+			if($key == "ID") continue;
+			$name = $arResult['fields'][$key]['XML_ID'];
+		    $b = $xml->createElement($name, $val);
+			$bid->appendChild($b);	
+		}
+	}
+	$xml->formatOutput = true;
+	print $xml->save("1.xml"); 
+	echo"<a href='1.xml' download>Скачать</a>";	
+}
+?>
 <div class="reports-result-list-wrap">
 <div class="report-table-wrap">
 <div class="reports-list-left-corner"></div>
@@ -72,7 +99,9 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			|| $col == 'UF_LIKE_PRICE'
 			|| $col == 'UF_PHONE'
 			|| $col == 'UF_FIO_USER'
-			|| $col == 'UF_LINK_USER')
+			|| $col == 'UF_LINK_USER'
+			|| $col == 'UF_USER_ID'
+			|| $col == 'UF_DATE_TIME_COMMENT')
 	    {  
 	        continue;
 		}
@@ -144,7 +173,9 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			|| $col == 'UF_LIKE_PRICE'
 			|| $col == 'UF_FIO_USER'
 			|| $col == 'UF_PHONE'
-			|| $col == 'UF_LINK_USER')
+			|| $col == 'UF_LINK_USER'
+			|| $col == 'UF_USER_ID'
+			|| $col == 'UF_DATE_TIME_COMMENT')
 	    {  
 	        continue;
 		}
@@ -163,18 +194,30 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 		}
 
 		?>
-		<td class="<?=$td_class?>"><span class="btn<?=$row['ID']?>"><?=$finalValue?></span></td>
-		<script>
-			$(document).ready(function(){  
-			    $('.btn<?=$row['ID']?>').fancybox({type: 'ajax', href: "detail.php?ID=<?=$row['ID']?>"});
-			})
-		</script>
+		<td class="<?=$row['ID']?>"><?=$finalValue?></td>
+		
 		<? endforeach; ?>
 	</tr>
 	<? endforeach; ?>
 
 </table>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	var table = document.getElementById('report-result-table');
+	var trList= table.getElementsByTagName('tr');
+	for (var i=0;i<trList.length;i++)
+	{
+	   var tdList = trList[i].getElementsByTagName('td');
 
+	   for (var j=0;j<tdList.length;j++) 
+	   {
+	     var id = tdList[j].classList.item(0);
+		 
+		 $('.' + id).fancybox({type: 'ajax', href: "detail.php?ID=" + id });
+	   }
+	}
+})
+</script>
 <?php
 if ($arParams['ROWS_PER_PAGE'] > 0):
 	$APPLICATION->IncludeComponent(

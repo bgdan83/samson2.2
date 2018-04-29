@@ -1,24 +1,24 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Цена ниже");
-if(isset($_POST['cond']))
+if(isset($_GET['cond']))
 {
 	$cond = intval($_POST['cond']);
 	$arrFilter = array('UF_CONDITION' => $cond);
 }
-if(isset($_POST['vendor_code']))
+if(isset($_GET['vendor_code']))
 {
-    $vendor_code = htmlspecialcharsEx($_POST['vendor_code']);
+    $vendor_code = trim(htmlspecialcharsEx($_GET['vendor_code']));
     $arrFilter = array('UF_VENDOR_CODE' => $vendor_code);
 }
-if(isset($_POST['date']))
+if(isset($_GET['date']))
 {
-    $date = htmlspecialcharsEx($_POST['date']);
+    $date = htmlspecialcharsEx($_GET['date']);
     $arrFilter = array('UF_DATE_BID' => $date);
 }
-if(isset($_POST['date_sort']))
+if(isset($_GET['date_sort']))
 {
-    $date_sort = htmlspecialcharsEx($_POST['date_sort']);
+    $date_sort = htmlspecialcharsEx($_GET['date_sort']);
    
 }
 ?><?$APPLICATION->IncludeComponent(

@@ -45,7 +45,9 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			|| $col == 'UF_PHOTO'
 			|| $col == 'UF_LIKE_PRICE'
 			|| $col == 'UF_FIO_USER'
-			|| $col == 'UF_PHONE')
+			|| $col == 'UF_PHONE'
+			|| $col == 'UF_USER_ID'
+			|| $col == 'UF_DATE_TIME_COMMENT')
 	    {
             continue;			
 	    }
@@ -115,7 +117,9 @@ $GLOBALS['APPLICATION']->SetAdditionalCSS('/bitrix/js/highloadblock/css/highload
 			|| $col == 'UF_PHOTO'
 			|| $col == 'UF_LIKE_PRICE'
 			|| $col == 'UF_FIO_USER'
-			|| $col == 'UF_PHONE')
+			|| $col == 'UF_PHONE'
+			|| $col == 'UF_USER_ID'
+			|| $col == 'UF_DATE_TIME_COMMENT')
 	    {
             continue;			
 	    }
