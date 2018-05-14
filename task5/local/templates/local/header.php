@@ -58,7 +58,7 @@ IncludeTemplateLangFile(__FILE__);
 																"PATH" => "/include/workTime.php"
 															)
 														);?></span>	
-                            <?=$APPLICATION->ShowViewContent('name_view_product')?>														
+							<p><?$APPLICATION->ShowProperty('name_view_product')?></p>																				
 						</td>
 						<td style="width:232px">
 							<form action="">

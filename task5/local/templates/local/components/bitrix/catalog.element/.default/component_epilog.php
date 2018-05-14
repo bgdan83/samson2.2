@@ -133,7 +133,35 @@ if (isset($templateData['JS_OBJ']))
 	}
 }
 ?>
+<?
+$APPLICATION->SetPageProperty('name_view_product', $arResult['NAME']);
 
-<?$this->__template->SetViewTarget('name_view_product');?>
-   <?=$arResult['NAME'];?>
-<?$this->__template->EndViewTarget();?>	
+if ($USER->GetID()){
+	global $USER;
+	$userId = $USER->GetID();
+	$rsUsers = \Bitrix\Main\UserTable::getList(array(
+										'select'  => array(  
+															'NAME',
+															'LAST_NAME',
+															'SECOND_NAME',
+															'PERSONAL_PHONE',
+															'LOGIN',
+										),
+										'filter'  => array('LID' => SITE_ID,
+														   'ID' => $userId
+										)
+	));        
+	if($arUser = $rsUsers->fetch()){
+		$name = $arUser["LAST_NAME"] . " " . $arUser["NAME"] . " " . $arUser["SECOND_NAME"];
+		$phone = $arUser["PERSONAL_PHONE"];
+	}
+}	
+
+?>
+<script>
+BX.ready(function(){
+	$("#fio").val("<?=$name?>");
+	$("#phone").val("<?=$phone?>");
+	$("#user_id").val("<?=$GLOBALS['USER']->GetID()?>");
+});
+</script>

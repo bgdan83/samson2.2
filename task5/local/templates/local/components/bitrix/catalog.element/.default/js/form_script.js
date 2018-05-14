@@ -24,7 +24,7 @@ $(document).ready(function(){
 		    type: $that.attr('method'), 
 		    data: {form_data: fData},
 		    dataType: 'json',
-		    complete: function() {
+		    complete: function(json) {
 			   $that.html("Мы вам сообщим свое решение"); 
 		    }
 		});

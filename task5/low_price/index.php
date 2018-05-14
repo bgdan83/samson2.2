@@ -1,22 +1,12 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Хочу дешевле");
-?><?
-//global $USER;
-//$arrFilter = array('UF_USER_ID' => $USER->GetID());
-?>
-<?$APPLICATION->IncludeComponent(
-	"bitrix:highloadblock.list",
-	"user_bid",
-	Array(
-		"BLOCK_ID" => "1",
-		"CHECK_PERMISSIONS" => "Y",
-		"COMPONENT_TEMPLATE" => "user_bid",
-		"DETAIL_URL" => "",
-		"FILTER_NAME" => "arrFilter",
-		"PAGEN_ID" => "page",
-		"ROWS_PER_PAGE" => "",
-		"SORT_FIELD" => "ID",
-		"SORT_ORDER" => "DESC"
-	)
+?><?$APPLICATION->IncludeComponent("mycomponent:low_price_highloadblock_list", "local_low_price", Array(
+	"BLOCK_ID" => "1",	// ID инфоблока
+		"DETAIL_URL" => "",	// Путь к странице просмотра записи
+		"FOR_ADMIN" => "N",	// Для аминистратора
+		"PAGEN_ID" => "page",	// Идентификатор страницы
+		"ROWS_PER_PAGE" => "",	// Разбить по страницам количеством
+	),
+	false
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

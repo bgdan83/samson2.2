@@ -1,13 +1,17 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
+
 $APPLICATION->SetTitle("Заявка");
-?><?$APPLICATION->IncludeComponent("bitrix:highloadblock.view", "low_price_detail", Array(
-	"BLOCK_ID" => "1",	// ID инфоблока
-		"CHECK_PERMISSIONS" => "N",	// Проверять права доступа
-		"LIST_URL" => "index.php",	// Путь к странице списка записей
-		"ROW_ID" => $_REQUEST["ID"],	// Значение ключа записи
-		"ROW_KEY" => "ID",	// Ключ записи
-		"COMPONENT_TEMPLATE" => ".default"
+?><?$APPLICATION->IncludeComponent(
+	"mycomponent:low_price_highloadblock_list", 
+	"detail_low_price", 
+	array(
+		"BLOCK_ID" => "1",
+		"DETAIL_URL" => "",
+		"FOR_ADMIN" => "N",
+		"PAGEN_ID" => "page",
+		"ROWS_PER_PAGE" => "",
+		"COMPONENT_TEMPLATE" => "detail_low_price"
 	),
 	false
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

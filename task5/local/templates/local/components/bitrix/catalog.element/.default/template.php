@@ -160,6 +160,33 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 }
 ?>
 
+<a href="#login_form" rel="nofollow" id="tip5">Хочу дешевле</a>
+<div style="display:none">
+	<form id="login_form" method="post" action="">
+		<p id="login_error">Пожалуйста, заполните все поля</p>		
+		<p>
+			<label for="like_price">Желаемая цена </label>
+			<input type="text" id="like_price" name="like_price" size="30" />
+		</p>
+		<p>
+			<label for="fio">ФИО </label>
+			<input type="text" id="fio" name="fio" size="30" value="" />
+		</p>
+		<p>
+			<label for="phone">Телефон +7</label>
+			<input type="text" id="phone" name="phone" size="30" value="">
+		</p>
+		<input type="hidden" name="goods_id" value="<?=$arResult['ID']?>">
+		<input type="hidden" name="user_id" id="user_id" value="">
+		<input type="hidden" name="vendor_code" value="<?=$arResult['PROPERTIES']['ARTNUMBER']['VALUE']?>">
+		<input type="hidden" name="site_price" value="<?=$arResult['PROPERTIES']['PRICE']['VALUE']?>">
+		<p>
+			<input type="submit" value="Отправить" />
+		</p>
+		
+	</form>
+</div>
+
 <div class="bx-catalog-element bx-<?=$arParams['TEMPLATE_THEME']?>" id="<?=$itemIds['ID']?>"
 	itemscope itemtype="http://schema.org/Product">
 	<div class="container-fluid">
@@ -177,38 +204,6 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			<?
 		}
 		?>
-		
-		<div style="display:none">
-			<form id="login_form" method="post" action="">
-				<p id="login_error">Пожалуйста, заполните все поля</p>		
-				<p>
-					<label for="like_price">Желаемая цена </label>
-					<input type="text" id="like_price" name="like_price" size="30" />
-				</p>
-				<p>
-					<label for="fio">ФИО </label>
-					<input type="text" id="fio" name="fio" size="30" value="<?=$arResult['USER']['NAME']?>" />
-				</p>
-				<p>
-					<label for="phone">Телефон +7</label>
-					<input type="text" id="phone" name="phone" size="30" value="<?=$arResult['USER']['PERSONAL_PHONE']?>"/>
-				</p>
-				<input type="hidden" name="name_goods" value="<?=$arResult['NAME']?>">
-				<input type="hidden" name="vendor_code" value="<?=$arResult['PROPERTIES']['ARTNUMBER']['VALUE']?>">
-				<input type="hidden" name="site_price" value="<?=$arResult['PROPERTIES']['PRICE']['VALUE']?>">
-				<input type="hidden" name="user_login" value="<?=$arResult['USER']['LOGIN']?>">
-				<input type="hidden" name="user_id" value="<?=$USER->GetID()?>">
-				<input type="hidden" name="link_goods" value="<?=$arResult['DETAIL_PAGE_URL']?>">
-				<input type="hidden" name="photo"      value="<?=$arResult['DETAIL_PICTURE']['SRC']?>">
-				<p>
-					<input type="submit" value="Отправить" />
-				</p>
-				
-			</form>
-        </div>
-		
-    <a href="#login_form" rel="nofollow" id="tip5">Хочу дешевле</a>
-
 
 		<div class="row">
 			<div class="col-md-6 col-sm-12">
