@@ -14,18 +14,19 @@ if(isset($_POST['data'])){
 ?>
 
        
-<form id="my_form" action="" method="post">
+<form id="form" action="" method="post">
 	
 	<div class="step">
-		<input  type="text" name="name_1" value=""  autocomplete="off" />
+		<input class="auto" type="text" name="name_1" value=""  autocomplete="off" />
 		<input class="notAuto"  type="text" name="quan_1" value=""  />
 	</div>
 	<div class="step">
-		<input  type="text" name="name_2" value=""  autocomplete="off" />
+		<input class="auto" type="text" name="name_2" value=""  autocomplete="off" />
 		<input class="notAuto"  type="text" name="quan_2" value=""  />
 	</div>
 	<p><input type="submit"  id="submit"></p>
 </form>
+<div id="output">Ghbdtn</div>
 <script>
 BX.message({
    componentPath: '<?=CUtil::JSEscape($componentPath)?>'

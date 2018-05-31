@@ -1,7 +1,8 @@
 
 $(function() {
-	$(".notAuto").hide();
-		$( ":input" ).autocomplete({
+	
+	$("div input.notAuto").hide();
+		$( "div input.auto" ).autocomplete({
 			source: function( request, response ) {
 				$.ajax({
 					url: BX.message('componentPath') + "/ajax_s.php",
@@ -20,11 +21,12 @@ $(function() {
 				});
 			},
 			select: function() {
-				$(".notAuto").show(); 
+				$("div input.notAuto").show(); 
 			},	
 			minLength: 0,
 		});
-	$('#my_form').on('submit', function(e){
+	$('#form').on('submit', function(e){
+		
 		e.preventDefault();
         var $that = $(this),
         fData = $that.serialize();
@@ -34,7 +36,11 @@ $(function() {
 		    type: $that.attr('method'),
 		    data: {data: fData},
 		    dataType: 'json',
-		    success: function(data) {
+			
+			complete: function(){ // функция вызывается по окончании запроса
+				$.fancybox.open('<div class="message">You are awesome!</p></div>');
+			},
+			success: function(data) {
 			    
 		    }
 		}); 

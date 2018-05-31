@@ -51,9 +51,9 @@ class AddBasket extends CBitrixComponent
 	
 	}	
 	public function executeComponent()
-		{ 
-			$this->add();
+	{ 
+		$this->add();
 
-			$this->IncludeComponentTemplate();			
-		}
+		$this->IncludeComponentTemplate();			
+	}
 }
