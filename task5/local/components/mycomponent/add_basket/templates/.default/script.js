@@ -26,22 +26,24 @@ $(function() {
 			minLength: 0,
 		});
 	$('#form').on('submit', function(e){
-		
+		var output = $('#output');
 		e.preventDefault();
         var $that = $(this),
         fData = $that.serialize();
 		console.log({data: fData});
+		console.log(BX.message('componentPath') + "/class.php");
 		$.ajax({
-		    url: $that.attr('action'),
+		    url: BX.message('componentPath') + "/class.php",
 		    type: $that.attr('method'),
 		    data: {data: fData},
 		    dataType: 'json',
+			error: function(req, text, error){ 
 			
-			complete: function(){ // функция вызывается по окончании запроса
-				$.fancybox.open('<div class="message">You are awesome!</p></div>');
+				$.fancybox.open('Хьюстон, У нас проблемы! ' + text + ' | ' + error);
 			},
-			success: function(data) {
-			    
+			success: function(json) {
+				//console.log(json);
+			    $.fancybox.open('<div class="message">Сумма вашего заказа : ' + json + '</p></div>');
 		    }
 		}); 
 	});
