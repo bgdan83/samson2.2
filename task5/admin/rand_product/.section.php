@@ -1,0 +1,6 @@
+<?
+$sSectionName = "Витрина";
+$arDirProperties = Array(
+
+);
+?>

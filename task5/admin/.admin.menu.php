@@ -1,0 +1,60 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"", 
+		"/", 
+		Array(), 
+		Array("IMG"=>"/bitrix/templates/.default/images/nv_home.png"), 
+		"" 
+	),
+	Array(
+		"Инфоблоки", 
+		"/admin/iblock/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Пользователи", 
+		"/admin/users/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Форма", 
+		"/admin/form/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Витрина", 
+		"/admin/rand_product/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Загрузка фото", 
+		"/admin/img_upload/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Новый юзер", 
+		"/admin/user_new/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Хочу дешевле", 
+		"/admin/lowprice/", 
+		Array(), 
+		Array(), 
+		"" 
+	)
+);
+?>

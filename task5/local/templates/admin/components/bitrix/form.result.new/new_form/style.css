@@ -1,0 +1,95 @@
+table.form-table
+{
+	width:100%;
+	background-color:white;
+	border-collapse:collapse;
+	font-size:100%;
+	font-weight:normal;
+	line-height:160%;
+}
+
+table.form-table th, table.form-table td
+{
+	border:1px solid #ADC3D5;
+	padding: 5px 5px;
+	vertical-align:top;
+}
+
+table.form-table th
+{
+	background-image:url(images/table_head.gif);
+	background-repeat:repeat-x;
+	text-align: left;
+	color:#25639A;
+}
+
+
+table.form-table td
+{
+	padding: 15px 5px;
+}
+
+.form-required 
+{
+	color: red;
+}
+
+.error-fld {
+	display: block;
+	float: left;
+	height: 13px;
+	width: 15px;
+	background-repeat: no-repeat;
+	background-image: url(images/icon_warn.gif);
+}
+
+
+ 
+#popupform .error {
+    color: #c00000;
+}
+#popupform h2 {
+    color: #353535;
+    font: 1.714em/1em 'Trebuchet MS';
+    margin-bottom: 8px;
+}
+#popupform .comment {
+    color: #717171;
+    font: 0.928em 'Trebuchet MS';
+    margin-bottom: 3px;
+}
+#popupform label {
+    display: block;
+    padding: 16px 0 4px;
+}
+#popupform .input_text {
+    background-color: #fff;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    color: #555;
+    display: block;
+    font-size: 12pt;
+    height: 28px;
+    margin: 17px 6px 0 0;
+    padding: 5px;
+    width: 360px;
+}
+ 
+#popupform .button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #555;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    height: 34px;
+    margin: 10px 0;
+    padding: 2px 16px;
+    width: 185px;
+}
+#popupform .button:hover {
+    background-color: #4683ea;
+    border: 1px solid #4387fd;
+    color: #fff;
+}
