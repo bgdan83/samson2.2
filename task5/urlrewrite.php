@@ -3,7 +3,6 @@ $arUrlRewrite = array(
 	array(
 		"CONDITION" => "#^/admin/user_new/([a-zA-Z0-9\\.\\-_]+)/?.*#",
 		"RULE" => "LOGIN=\$1",
-		"RULE" => "LOGIN=\$1",
 		"PATH" => "/admin/users/detail.php",
 	),
 	array(
