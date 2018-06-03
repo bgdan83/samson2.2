@@ -1,30 +1,29 @@
 
 $(function() {
-	
-	$("div input.notAuto").hide();
-		$( "div input.auto" ).autocomplete({
-			source: function( request, response ) {
-				$.ajax({
-					url: BX.message('componentPath') + "/ajax_s.php",
-					dataType: "json",
-					data: {
-						name_startsWith: request.term
-					},
-					success: function( data ) {
-						response( $.map( data.code, function(key, value) {
-						return {
-							label: key,
-							value: value
-							}
-						}));
-					}
-				});
-			},
-			select: function() {
-				$("div input.notAuto").show(); 
-			},	
-			minLength: 0,
-		});
+	$(".notAuto").hide();
+	$( ".auto" ).autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url: BX.message('componentPath') + "/ajax_s.php",
+				dataType: "json",
+				data: {
+					name_startsWith: request.term
+				},
+				success: function( data ) {
+					response( $.map( data.code, function(key, value) {
+					return {
+						label: key,
+						value: value
+						}
+					}));
+				}
+			});
+		},
+		select: function() {
+			$(this).siblings().show(); 
+		},	
+		minLength: 0,
+	});
 	$('#form').on('submit', function(e){
 		var output = $('#output');
 		e.preventDefault();
