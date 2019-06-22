@@ -18,7 +18,7 @@ class EchoTableClass
     public function getValue($ar)
     {
         echo '<table border = "1">';
-        for ($i = 0; $i < count($ar) * 10; $i++) {
+        for ($i = 0; $i < count($ar) + 2; $i++) {
             echo '<tr>';
             foreach ($ar[$i] as $a => $val) {
                 echo '<td>' . $val . '</td>';
