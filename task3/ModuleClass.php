@@ -7,32 +7,24 @@
  */
 
 /**
- * Методы
+ * Весь функционал пока что здесь
  *
  * @author Максим
  */
 class ModuleClass
 {
-
+    public static $arParent;
     function __construct()
     {
-
         $this->mysqli = new mysqli(HOST, USER, PASS, DB);
+        $this->mysqli->set_charset("utf8");
     }
 
     // ловит Get при выборе рубрики
     function getId()
     {
-        if (isset($_GET['parent_id']) and isset($_GET['category_id'])) {
-            $category_id = strip_tags(htmlspecialchars($_GET['category_id']));
-            $category_id = $this->mysqli->real_escape_string($category_id);
-            $parent_id = strip_tags(htmlspecialchars($_GET['parent_id']));
-            $parent_id = $this->mysqli->real_escape_string($parent_id);
-            if ($parent_id == 0) {
-                return $category_id;
-            } else {
-                return $parent_id;
-            }
+        if (isset($_GET['parent_id'])) {
+             return $_GET['parent_id'];
         }
     }
     
@@ -86,18 +78,6 @@ class ModuleClass
         return $data;
     }
 
-    //Функция получения массива каталога
-    function get_cats()
-    {
-        $query = "SELECT id, parent_id FROM category";
-        $res = $this->mysqli->query($query);
-
-        $arr_cat = array();
-        while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
-            $arr_cat[$row['id']] = $row;
-        }
-        return $arr_cat;
-    }
 
     function getCatId()
     {
@@ -123,42 +103,47 @@ class ModuleClass
         if (!$result) {
             return NULL;
         }
-        $arr_cat = array();
+        $arr_cat = [];
         if ($result->num_rows != 0) {
-            //В цикле формируем массив
             for ($i = 0; $i < $result->num_rows; $i++) {
                 $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                //Формируем массив, где ключами являются адишники на родительские категории
-                if (empty($arr_cat[$row['parent_id']])) {
-                    $arr_cat[$row['parent_id']] = array();
-                }
-                $arr_cat[$row['parent_id']][] = $row;
+                $arr_cat['SECTIONS'][$row['parent_id']][$row['id']] = $row;
+                $arr_cat['PARENT'][$row['id']] = $row['parent_id'];
             }
-            
             return $arr_cat;
         }
     }
-
-//вывод каталога с помощью рекурсии
-    public function view_cat($arr, $parent_id = 0)
-    {
-
-        //Условия выхода из рекурсии
-        if (empty($arr[$parent_id])) {
-            return;
+    // получение всех категорий предков
+    static function getParent($arr,  $id) {
+        foreach ($arr['SECTIONS'] as $parentID => $arGroupSection) {
+            if ($id !== 0 && isset($arGroupSection[$id])) {
+                static::$arParent[$id] = false;
+               self::req($arr, $parentID);
+            }
         }
+    }
+
+    //вывод каталога
+    public function view_cat($arr, $parent_id = 0, $arSelected = [])
+    {
+        $requestId = 0;
+        if (isset($_GET['category_id'])) {
+            $requestId  = $_GET['category_id'];
+        }
+        self::getParent($arr, $requestId);
         echo '<ul>';
-        //перебираем в цикле массив и выводим на экран
-        for ($i = 0; $i < count($arr[$parent_id]); $i++) {
-        
-            echo '<li>' .
-            '<a href="?category_id=' . $arr[$parent_id][$i]['id'] .
-            '&parent_id=' . $parent_id . '">'
-            . $arr[$parent_id][$i]['category_name'] .
+        foreach($arr['SECTIONS'][$parent_id] as $sectionID => $arSection) {
+            echo '<li' .  (
+                $parent_id == 0
+                || $parent_id == $requestId
+                || isset(static::$arParent[$sectionID])
+                    ? '' : ' style="display:none"') . '>' .
+            '<a href="?category_id=' . $arSection['id'] . '">'
+            . $arSection['category_name'] .
             '</a>';
-            //рекурсия - проверяем нет ли дочерних категорий
-            ModuleClass::view_cat($arr, $arr[$parent_id][$i]['id']);
+            if (!empty($arr['SECTIONS'][$arSection['id']])) {
+                ModuleClass::view_cat($arr, $sectionID, $arSelected);
+            }
             echo '</li>';
         }
         echo '</ul>';
@@ -219,6 +204,19 @@ class ModuleClass
         }
     }
 
+    //Функция получения массива каталога
+    function get_cats()
+    {
+        $query = "SELECT id, parent_id FROM category";
+        $res = $this->mysqli->query($query);
+
+        $arr_cat = array();
+        while ($row = $res->fetch_array(MYSQLI_ASSOC)) {
+            $arr_cat[$row['id']] = $row;
+        }
+        return $arr_cat;
+    }
+
     function importXmlToBd()
     {
         if (isset($_POST['buttonImport'])) {
@@ -231,7 +229,7 @@ class ModuleClass
                 $properties = $Товар->Свойства;
                 $categories = $Товар->Разделы->Раздел;
                 $temp = 0;
-                $arr = ModuleClass::getCatId();
+                $arr = self::getCatId();
                 $arr = array_column($arr, 'category_name', 'id');
                 
                 $query = "INSERT INTO product (
@@ -299,8 +297,6 @@ class ModuleClass
     {
         //header('Content-type: text/xml');
         if (isset($_POST['buttonExport'])) {
-
-
             $db = new PDO('mysql:host=localhost;dbname=test_rubric', 'root', '');
             $stmt = $db->prepare("SELECT id, product_name, code FROM product");
             $stmt->execute();
@@ -340,8 +336,7 @@ class ModuleClass
                         $properties1->setAttribute("ЕдИзм", $row2['units']);
                     }
                     $properties->appendChild($properties1);
-                    
-                    
+
                 }
 
                 $categories = $xml->createElement("Разделы");
@@ -356,14 +351,11 @@ class ModuleClass
                     $categories->appendChild($category);
                 }
             }
-
-            
             $xml->formatOutput = true;
             print $xml->save("1.xml");
            
         }
     }
-
 }
 ?>
 
