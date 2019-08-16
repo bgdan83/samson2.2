@@ -118,7 +118,7 @@ class ModuleClass
         foreach ($arr['SECTIONS'] as $parentID => $arGroupSection) {
             if ($id !== 0 && isset($arGroupSection[$id])) {
                 static::$arParent[$id] = false;
-               self::req($arr, $parentID);
+               self::getParent($arr, $parentID);
             }
         }
     }
