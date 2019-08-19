@@ -13,7 +13,14 @@
  */
 class ModuleClass
 {
+    /**
+     * @var
+     */
     public static $arParent;
+
+    /**
+     * ModuleClass constructor.
+     */
     function __construct()
     {
         $this->mysqli = new mysqli(HOST, USER, PASS, DB);
@@ -21,14 +28,23 @@ class ModuleClass
     }
 
     // ловит Get при выборе рубрики
+
+    /**
+     * @return mixed
+     */
     function getId()
     {
         if (isset($_GET['parent_id'])) {
              return $_GET['parent_id'];
         }
     }
-    
-    //принимает ID выводимых товаров в выбранной рубрике 
+
+
+    /**
+     * принимает ID выводимых товаров в выбранной рубрике
+     * @param $ids
+     * @return array
+     */
     function get_product_all($ids)
     {
         if ($ids) {
@@ -52,7 +68,11 @@ class ModuleClass
         return $products;
     }
 
-    // вывод товаров на экран
+
+    /**
+     * вывод товаров на экран
+     * @param $arr
+     */
     function view_product($arr)
     {
         if (is_array($arr)) {
@@ -63,6 +83,11 @@ class ModuleClass
         }
     }
 
+    /**
+     * @param $array
+     * @param bool $id
+     * @return bool|string
+     */
     function cats_id($array, $id = false)
     {
         if (!$id)
@@ -79,6 +104,9 @@ class ModuleClass
     }
 
 
+    /**
+     * @return array
+     */
     function getCatId()
     {
         $query = "SELECT id, category_name FROM category";
@@ -95,9 +123,11 @@ class ModuleClass
         return $arr;
     }
 
+    /**
+     * @return array|null
+     */
     function get_cat()
     {
-        //запрос к базе данных
         $sql = "SELECT * FROM category";
         $result = $this->mysqli->query($sql);
         if (!$result) {
@@ -113,8 +143,13 @@ class ModuleClass
             return $arr_cat;
         }
     }
-    // получение всех категорий предков
-    static function getParent($arr,  $id) {
+
+    /**
+     * получение всех категорий предков
+     * @param $arr
+     * @param $id
+     */
+    static function getParent($arr, $id) {
         foreach ($arr['SECTIONS'] as $parentID => $arGroupSection) {
             if ($id !== 0 && isset($arGroupSection[$id])) {
                 static::$arParent[$id] = false;
@@ -123,7 +158,13 @@ class ModuleClass
         }
     }
 
-    //вывод каталога
+
+    /**
+     * вывод каталога
+     * @param $arr
+     * @param int $parent_id
+     * @param array $arSelected
+     */
     public function view_cat($arr, $parent_id = 0, $arSelected = [])
     {
         $requestId = 0;
@@ -131,11 +172,14 @@ class ModuleClass
             $requestId  = $_GET['category_id'];
         }
         self::getParent($arr, $requestId);
+        $parentView = isset($arr['SECTIONS'][$parent_id][$requestId])
+            && empty($arr['SECTIONS'][$requestId]);
         echo '<ul>';
         foreach($arr['SECTIONS'][$parent_id] as $sectionID => $arSection) {
             echo '<li' .  (
                 $parent_id == 0
                 || $parent_id == $requestId
+                || $parentView
                 || isset(static::$arParent[$sectionID])
                     ? '' : ' style="display:none"') . '>' .
             '<a href="?category_id=' . $arSection['id'] . '">'
@@ -149,6 +193,9 @@ class ModuleClass
         echo '</ul>';
     }
 
+    /**
+     *
+     */
     public function filtr_name()
     {
         if (!empty($_GET['product_name'])) {
@@ -177,6 +224,9 @@ class ModuleClass
         }
     }
 
+    /**
+     *
+     */
     public function filtr_price()
     {
         if (isset($_GET['max_price']) and isset($_GET['min_price'])) {
@@ -205,6 +255,10 @@ class ModuleClass
     }
 
     //Функция получения массива каталога
+
+    /**
+     * @return array
+     */
     function get_cats()
     {
         $query = "SELECT id, parent_id FROM category";
@@ -217,6 +271,9 @@ class ModuleClass
         return $arr_cat;
     }
 
+    /**
+     *
+     */
     function importXmlToBd()
     {
         if (isset($_POST['buttonImport'])) {
@@ -293,6 +350,9 @@ class ModuleClass
         }
     }
 
+    /**
+     *
+     */
     function exportXmlToFile()
     {
         //header('Content-type: text/xml');
