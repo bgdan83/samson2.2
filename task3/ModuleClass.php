@@ -27,9 +27,9 @@ class ModuleClass
         $this->mysqli->set_charset("utf8");
     }
 
-    // ловит Get при выборе рубрики
 
     /**
+     * ловит Get при выборе рубрики
      * @return mixed
      */
     function getId()
@@ -362,11 +362,8 @@ class ModuleClass
             $stmt->execute();
 
             $xml = new DOMDocument("1.0", "windows-1251");
-
             $products = $xml->appendChild($xml->createElement("Товары"));
-
             while ($row = $stmt->fetch()) {
-
                 $product = $xml->createElement("Товар");
                 $products->appendChild($product);
                 $product->setAttribute("Код", $row['code']);
@@ -390,21 +387,21 @@ class ModuleClass
                                     . "WHERE product_id = '" . $row['id'] . "'");
                 $stmt2->execute();
                 while ($row2 = $stmt2->fetch()) {
-                    
                     $properties1 = $xml->createElement($row2['properties_name'], $row2['properties_value']);
                     if (!empty($row2['units'])){
                         $properties1->setAttribute("ЕдИзм", $row2['units']);
                     }
                     $properties->appendChild($properties1);
-
                 }
 
                 $categories = $xml->createElement("Разделы");
                 $product->appendChild($categories);
-                $stmt3 = $db->prepare("SELECT c.category_name 
-                                       FROM category c 
-                                       INNER JOIN product_to_category ptg ON ptg.category_id = c.id
-                                       WHERE ptg.product_id = '" . $row['id'] . "'");
+                $stmt3 = $db->prepare(
+                    "SELECT c.category_name                               
+                    FROM category c 
+                    INNER JOIN product_to_category ptg ON ptg.category_id = c.id
+                    WHERE ptg.product_id = '" . $row['id'] . "'"
+                );
                 $stmt3->execute();
                 while ($row3 = $stmt3->fetch()) {
                     $category = $xml->createElement("Раздел", $row3['category_name']);
@@ -412,8 +409,27 @@ class ModuleClass
                 }
             }
             $xml->formatOutput = true;
-            print $xml->save("1.xml");
-           
+            $file = "exportgoods.xml";
+            $xml->save($file);
+            if (file_exists($file)) {
+                // сбрасываем буфер вывода PHP, чтобы избежать переполнения памяти выделенной под скрипт
+                // если этого не сделать файл будет читаться в память полностью!
+                if (ob_get_level()) {
+                    ob_end_clean();
+                }
+                // заставляем браузер показать окно сохранения файла
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename=' . basename($file));
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($file));
+                // читаем файл и отправляем его пользователю
+                readfile($file);
+                exit;
+            }
         }
     }
 }
