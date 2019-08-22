@@ -1,15 +1,9 @@
 <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+include 'config.php';
 /**
  * Весь функционал пока что здесь
  *
- * @author Максим
+ *
  */
 class ModuleClass
 {
@@ -274,80 +268,80 @@ class ModuleClass
     /**
      *
      */
-    function importXmlToBd()
+    function importXmlToBd($fileName)
     {
-        if (isset($_POST['buttonImport'])) {
-            $products = simplexml_load_file('2.2.xml') or die("Error: Cannot create object");
 
-            foreach ($products as $Товар) {
-                $code = $Товар['Код'];
-                $product_name = $Товар['Название'];
-                $price = $Товар->Цена;
-                $properties = $Товар->Свойства;
-                $categories = $Товар->Разделы->Раздел;
-                $temp = 0;
-                $arr = self::getCatId();
-                $arr = array_column($arr, 'category_name', 'id');
-                
-                $query = "INSERT INTO product (
+        $products = simplexml_load_file($fileName) or die("Error: Cannot create object");
+
+        foreach ($products as $Товар) {
+            $code = $Товар['Код'];
+            $product_name = $Товар['Название'];
+            $price = $Товар->Цена;
+            $properties = $Товар->Свойства;
+            $categories = $Товар->Разделы->Раздел;
+            $temp = 0;
+            $arr = self::getCatId();
+            $arr = array_column($arr, 'category_name', 'id');
+
+            $query = "INSERT INTO product (
                         code, 
                         product_name)
                         VALUES( 
                         '" . $code . "', 
                          '" . $product_name . "' 
                         )";
-                $sql = $this->mysqli->query($query);
-                if ($sql) {
-                    echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
-                } else {
-                    echo "<p>Произошла ошибка.</p>";
-                }
-                $id = $this->mysqli->insert_id;
-                
-                foreach ($properties as $property) {
-                    foreach ($property as $k => $v) {
-                        $query = "INSERT INTO properties SET
+            $sql = $this->mysqli->query($query);
+            if ($sql) {
+                echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
+            } else {
+                echo "<p>Произошла ошибка.</p>";
+            }
+            $id = $this->mysqli->insert_id;
+
+            foreach ($properties as $property) {
+                foreach ($property as $k => $v) {
+                    $query = "INSERT INTO properties SET
                         product_id = '" . $id . "',
                         properties_name = '" . $k . "' , 
                         units = '" . $v->attributes() . "' , 
                         properties_value = '" . $v . "'";
-                        $sql = $this->mysqli->query($query);
-                        if ($sql) {
-                            echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
-                        } else {
-                            echo "<p>Произошла ошибка.</p>";
-                        }
+                    $sql = $this->mysqli->query($query);
+                    if ($sql) {
+                        echo "<p>Данные свойств успешно добавлены в таблицу.</p>";
+                    } else {
+                        echo "<p>Произошла ошибка.</p>";
                     }
                 }
-                
-                for ($i = 0, $j = count($price); $i < $j; $i++) {
-                    $query = "INSERT INTO price SET
+            }
+
+            for ($i = 0, $j = count($price); $i < $j; $i++) {
+                $query = "INSERT INTO price SET
                         product_id = '" . $id . "',
                         type = '" . $price[$i]->attributes() . "' , 
                         price_value = '" . $price[$i] . "'";
-                    $sql = $this->mysqli->query($query);
-                    if ($sql) {
-                        echo "<p>Данные цен успешно добавлены в таблицу.</p>";
-                    } else {
-                        echo "<p>Произошла ошибка.</p>";
-                    }
+                $sql = $this->mysqli->query($query);
+                if ($sql) {
+                    echo "<p>Данные цен успешно добавлены в таблицу.</p>";
+                } else {
+                    echo "<p>Произошла ошибка.</p>";
                 }
+            }
 
-                foreach ($categories as $category) {
-                    $temp = array_search($category, $arr);
-                    $query = "INSERT INTO product_to_category SET
+            foreach ($categories as $category) {
+                $temp = array_search($category, $arr);
+                $query = "INSERT INTO product_to_category SET
                         product_id = '" . $id . "',
                         category_id = '" . $temp . "'";
-                    $sql = $this->mysqli->query($query);
-                    if ($sql) {
-                        echo "<p>Данные категорий успешно добавлены в таблицу.</p>";
-                    } else {
-                        echo "<p>Произошла ошибка.</p>";
-                    }
+                $sql = $this->mysqli->query($query);
+                if ($sql) {
+                    echo "<p>Данные категорий успешно добавлены в таблицу.</p>";
+                } else {
+                    echo "<p>Произошла ошибка.</p>";
                 }
-                 
             }
+
         }
+
     }
 
     /**
@@ -357,7 +351,7 @@ class ModuleClass
     {
         //header('Content-type: text/xml');
         if (isset($_POST['buttonExport'])) {
-            $db = new PDO('mysql:host=localhost;dbname=test_rubric', 'root', '');
+            $db = new PDO('mysql:host=localhost;dbname=test_rubric;charset=UTF8', 'root', '');
             $stmt = $db->prepare("SELECT id, product_name, code FROM product");
             $stmt->execute();
 

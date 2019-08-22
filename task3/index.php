@@ -1,26 +1,15 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <script src="jquery341.js"></script>
+        <script src="main.js"></script>
+        <title>Магазин</title>
     </head>
     <body>
         <?php
-        //include "subStringReverse.php";
-        //include "sortArray.php";
-        /**
-         * Основная точка входа
-         */
-        //Отправляем заголовок с кодировкой
-        //header("Content-Type:text/html;charset=utf8");
-        //Подключаем файл с функциями и файл конфигурации
         include 'ModuleClass.php';
-        include 'config.php';
+
         //соединение с базой данных
         $db = new ModuleClass();
         //$db->connect(HOST, USER, PASS, DB);
@@ -76,16 +65,12 @@ and open the template in the editor.
                     copy($_FILES['xmlFile']['tmp_name'], $_FILES['xmlFile']['name']);
                 }
                 ?>
-
-
                 <td>
-                    <form method="post" enctype ="multipart/form-data">
-                        <p><b>XML файл</b>
-                            <input type="file" name="xmlFile"></p>
-                        <p><input type="submit" value="Загрузить" name="buttonImport"></p>
-                    </form>
+                     <p><b>XML файл</b>
+                         <input type="file" name="xmlFile[]" multiple="multiple"></p>
+                    <p><button type="submit" class="buttonImport">Загрузить</button></p>
+
                     <?php
-                    $db->importXmlToBd();
                     $db->exportXmlToFile();
                     ?>
                     <form method="post" enctype ="multipart/form-data">
